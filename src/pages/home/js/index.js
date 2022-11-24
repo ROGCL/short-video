@@ -24,6 +24,7 @@ export default {
                     text: "加长"
                 },
             ],
+            //艺术家
             artistList: [{
                     id: 1,
                     text: "夏加尔",
@@ -79,7 +80,7 @@ export default {
                      "value": "by Moebius",
                 }
             ],
-            // 选择绘画方式
+            // 选择vip还是普通
             drawChanels: [{
                     id: 1,
                     img: require("@/assets/img/index-img/2.png"),
@@ -92,6 +93,7 @@ export default {
                     h6: "优先使用服务器制作",
                 },
             ],
+            //支付方式
             payType: [{
                     name: "支付宝",
                     id: 1,
@@ -103,6 +105,7 @@ export default {
                     icon: require("@/assets/img/popup/6.png"),
                 },
             ],
+            //tab栏
             tabs: [{
                     id: 2,
                     content: "漫画",
@@ -118,6 +121,7 @@ export default {
                 //     value: 'disco_diffusion'
                 // },
             ],
+            //风格选择
             styleList: [{
                     poster: require('@/assets/img/style/style1.png'),
                     text: "油画",
@@ -179,6 +183,7 @@ export default {
                     id: 10
                 },
             ],
+            //比例
             ratio: [{
                     id: '2',
                     img: require("@/assets/img/index-img/10.png"),
@@ -205,6 +210,14 @@ export default {
                     content: "16:9",
                 },
             ],
+            //非vip提交成功字段
+            noneVip:[{
+                id:1,
+                text:'知道了'
+            },{
+                id:2,
+                text:'VIP加速'
+            }],
             promptList: promptList,
         }
     }

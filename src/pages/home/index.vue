@@ -150,18 +150,20 @@
         </div>
       </div>
       <!-- 选择通道 -->
-      <!-- <div class="title-public">
+      <div class="title-public">
         <img src="@/assets/img/index-img/25.png" alt="" class="image-public" />
       </div>
       <div class="path-road">
         <div class="normal width-public" v-for="item in drawChanels" :key="item.id"
-          :class="{ borderpubs: drawActiveId === item.id }" @click="drawChanelClick(item.id)">
+          :class="{ borderpubs: drawActiveId === item.id }" @click="drawChanelClick(item)">
           <img :src="item.img" alt="" />
-          <h5 class="h5-pub">{{ item.h5 }}</h5>
+          <h5 class="h5-pub" :class="{vipActive:vipActive == item.id}">{{item.h5}}</h5>
           <h6 class="h6-pub" v-if="item.id == 1">预计排队99999人</h6>
           <h6 class="h6-pub" v-else>{{ item.h6 }}</h6>
+          <!-- 超快压层 -->
+          <div class="fast-pannel" v-show="item.id == 2"></div>
         </div>
-      </div> -->
+      </div>
       <!-- 开始绘画按钮 -->
       <!-- <router-link to="/making">
         <div class="begin-btn">开始绘画</div>
@@ -242,6 +244,19 @@
           </div>
         </div>
       </van-popup>
+
+      <!-- 非vip弹窗 -->
+      <van-popup v-model="noneVipShow" round :close-on-click-overlay="false">
+       <div class="none-vip">
+        <div class="none-vip-inner">
+          <h5>提交成功</h5>
+        <h6>当前预计排队45674人，请耐心等待！</h6>
+        </div>
+        <div class="none-vip-bottom-btn">
+          <div class="inner-btn-box" v-for="item in noneVip" :key="item.id" :class="{btnInnerAvtive:btnInnerAvtive == item.id}" @click="choosePath(item)">{{item.text}}</div>
+        </div>
+       </div>
+      </van-popup>
     </div>
   </div>
 </template>
@@ -284,6 +299,9 @@ export default {
       combosActive: 0,  // 选择的套餐
       tabActiveIndex: 0,  // 选择的tab
       needBuyFlag: false, // 是否需要购买
+      vipActive:2,   //选择通道VIP样式
+      noneVipShow:false, //非vip提交成功的弹窗
+      btnInnerAvtive:2,  //非vip提交成功的弹窗的vip加速动态样式
     };
   },
 
@@ -330,9 +348,10 @@ export default {
   },
 
   mounted() {
-    if (this.$route.query.debug == 1) {
-      new vconsole()
-    }
+    // if (this.$route.query.debug == 1) {
+    //   new vconsole()
+    // }
+    new vconsole()  //记得打包时替换为上面
     console.log('更新7')
     // 暴露方法给APP
     window.onPageResume = this.onPageResume   // 刷新
@@ -564,10 +583,22 @@ export default {
     paychange(val) {
       this.payTypeActived = val
     },
-
-    drawChanelClick(id) {
-      this.drawActiveId = id;
+    //切换选择的通道
+    drawChanelClick(item) {
+      this.drawActiveId = item.id;
+      //赋默认值
+      // this.drawActive = item.id
+      console.log(this.drawActive,'vip')
     },
+    //提交成功的选择通道
+    choosePath(item){
+      if(item.id == 2){
+        this.show = true
+        this.noneVipShow = false
+      }else{
+        this.$router.push('/works')
+      }
+    }
   },
 };
 </script>
@@ -1012,11 +1043,19 @@ export default {
 .width-public {
   width: 4.4533rem;
   height: 2.1867rem;
-  background: #31373e;
+  background: rgba(49,55,62,0.5);
   border-radius: 0.2133rem;
 }
-
-
+.fast-pannel{
+  width: 1.0133rem;
+  height: .48rem;
+  background-image: url('@/assets/img/index-img/3.png');
+  background-size: 100% 100%;
+  transform: translateY(-1.92rem);
+}
+.vipActive{
+color: #66C3FF;
+}
 .success-img {
   width: 100%;
   height: 100%;
@@ -1114,7 +1153,7 @@ export default {
 .borderpubs {
   border: 0.0267rem solid #66C3FF;
   border-radius: .2133rem;
-  color: #66C3FF
+  /* color: #66C3FF */
     /* border-image: linear-gradient(135deg,
       rgba(80, 108, 255, 1),
       rgba(102, 195, 255, 1),
@@ -1471,6 +1510,53 @@ export default {
   background: linear-gradient(135deg, #506CFF 0%, #66C3FF 51%, #33E1D7 100%);
   color: #FFF;
   /* margin-left: .3467rem; */
+}
+.none-vip{
+  width: 6.6933rem;
+  height: 4.96rem;
+  background: #fff;
+}
+.none-vip-inner{
+  width: 100%;
+  height: 2.5867rem;
+  background-image: url('@/assets/img/making-img/3.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.none-vip-inner h5{
+  text-align: center;
+  font-size: .5333rem;
+  padding-top: .7467rem;
+}
+.none-vip-inner h6{
+  text-align: center;
+  padding-top: .16rem;
+  margin-left: .64rem;
+  margin-right: .64rem;
+  font-size: .3733rem;
+  color: #7D808D;
+}
+.none-vip-bottom-btn{
+  display: flex;
+  justify-content: space-between;
+  width: 5.28rem;
+  height: 1.0667rem;
+  margin-left: .72rem;
+  margin-top: .64rem;
+}
+.inner-btn-box{
+  width: 2.4267rem;
+  height: 100%;
+  background: rgba(49,55,62,0.1);
+  font-size: .3733rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.0667rem;
+  border-radius: .2133rem;
+}
+.btnInnerAvtive{
+  color: #fff;
+  background: linear-gradient(160deg, #FFA985 0%, #FF4370 100%);
 }
 </style>
 
