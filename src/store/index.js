@@ -6,7 +6,7 @@ Vue.use(Vuex);
 
 // State: 用于存储数据
 const state = {
-    userinfo: null,
+    userinfo: {},
     reDrawInfo: {} // 重置绘画的数据
 };
 

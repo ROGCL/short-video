@@ -259,7 +259,7 @@ export default {
   mixins: [myMin],
   data() {
     return {
-      showTips: false,
+      showTips: false, // 正在有绘画进行时提示弹窗
       docmHeight: document.documentElement.clientHeight,  //默认屏幕高度
       showHeight: document.documentElement.clientHeight,   //实时屏幕高度
       hideshow: true,  //显示或者隐藏footer
@@ -330,12 +330,10 @@ export default {
   },
 
   mounted() {
-    console.log('url参数', this.$route.query);
-    console.log('url', window.location);
     if (this.$route.query.debug == 1) {
       new vconsole()
     }
-    console.log('更新5');
+    console.log('更新7')
     // 暴露方法给APP
     window.onPageResume = this.onPageResume   // 刷新
     window.getAppParams = this.getAppParams  // 获取用户信息
@@ -388,6 +386,7 @@ export default {
           if (Object.keys(temp).length > 0) {
             // this.userinfo = temp
             this.setUserInfo(temp)
+            this.needBuyFlag = false
             console.log('获取用户数据成功ios', this.userinfo);
           } else {
             sendMessage('jumpClientFunction', { linkType: 3000 })
@@ -409,6 +408,7 @@ export default {
       if (device.system == 'android') {
         let userinfo = sendMessage('getUserInfo')
         if (userinfo) {
+          this.needBuyFlag = false
           // this.userinfo = JSON.parse(userinfo)
           this.setUserInfo(JSON.parse(userinfo))
           console.log('获取用户数据成功', this.userinfo);

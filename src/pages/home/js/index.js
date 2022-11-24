@@ -112,11 +112,11 @@ export default {
                     content: "通用",
                     value: 'stable_diffusion'
                 },
-                {
-                    id: 3,
-                    content: "写意",
-                    value: 'disco_diffusion'
-                },
+                // {
+                //     id: 3,
+                //     content: "写意",
+                //     value: 'disco_diffusion'
+                // },
             ],
             styleList: [{
                     poster: require('@/assets/img/style/style1.png'),
