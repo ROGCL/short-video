@@ -285,7 +285,7 @@ export default {
       tabActiveIndex: 0,  // 选择的tab
       needBuyFlag: false, // 是否需要购买
       init_image_ratio: '', // 图片比例
-      ratioAuto:false, // 是否自动选中比例
+      ratioAuto: false, // 是否自动选中比例
     };
   },
 
@@ -318,6 +318,8 @@ export default {
             this.promptIndex = idx2 > -1 ? idx2 : 0
             this.promptValue = val.TextPrompt
             this.init_image = val.imageUrl
+            // 自动初始化图片比列
+            this.initAutoRatio(val.imageUrl)
           }, 200);
           this.setreDrawInfo({})
 
@@ -326,10 +328,10 @@ export default {
       immediate: true
     },
     // 监听是否有图片
-    init_image(val){
-      if(val){
+    init_image(val) {
+      if (val) {
         this.ratioAuto = true
-      }else{
+      } else {
         this.ratioAuto = false
       }
     }
@@ -343,8 +345,8 @@ export default {
     if (this.$route.query.debug == 1) {
       new vconsole()
     }
-    new vconsole()
-    console.log('更新8')
+    // new vconsole()
+    console.log('更新9')
     // 暴露方法给APP
     window.onPageResume = this.onPageResume   // 刷新
     window.getAppParams = this.getAppParams  // 获取用户信息
@@ -486,7 +488,12 @@ export default {
     async onPhotoSelectComplete(res) {
       this.init_image = decodeURIComponent(res)
       console.log('上传图片成功回调', res);
-      const bl = await this.getImgSize(this.init_image)
+      this.initAutoRatio(this.init_image)
+    },
+
+    // 自动初始化比列
+    async initAutoRatio(imageUrl) {
+      const bl = await this.getImgSize(imageUrl)
       if (bl.width && bl.height) {
         this.init_image_ratio = bl.width / bl.height
         const arr = ['1', '0.75', '1.33', '0.56', '1.78']
@@ -495,9 +502,8 @@ export default {
         const closest = arr.reduce((prev, curr) => {
           return (Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev);
         });
-
-        const idx = this.ratio.findIndex(el=>el.ratioval == closest)
-        if(idx > -1){
+        const idx = this.ratio.findIndex(el => el.ratioval == closest)
+        if (idx > -1) {
           this.ratioIndex = idx
         }
       }
@@ -610,9 +616,9 @@ export default {
     },
 
     // 比列切换
-    changeratio(index){
-      if(this.ratioAuto){
-        return sendMessage('openToast','为保证图片质量，上传参考图后比例不允许修改')
+    changeratio(index) {
+      if (this.ratioAuto) {
+        return sendMessage('openToast', '为保证图片质量，上传参考图后比例不允许修改')
       }
       this.ratioIndex = index
 

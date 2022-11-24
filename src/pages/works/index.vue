@@ -8,7 +8,7 @@
       <div class="current ac" v-if="taskConduct > 0">
         <div class="ac">
           <img src="@/assets/img/1.png" class="loading-png" alt="">
-          <span>一个绘画正在进行中</span>
+          <span>绘画正在进行中，请下拉刷新查看</span>
         </div>
         <img src="@/assets/img/4.png" class="png4" alt="" @click="show = true">
       </div>
