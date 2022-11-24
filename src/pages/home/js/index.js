@@ -188,26 +188,31 @@ export default {
                     id: '2',
                     img: require("@/assets/img/index-img/10.png"),
                     content: "1:1",
+                    ratioval: '1'
                 },
                 {
                     id: '1',
                     img: require("@/assets/img/index-img/11.png"),
                     content: "3:4",
+                    ratioval: '0.75'
                 },
                 {
                     id: '0',
                     img: require("@/assets/img/index-img/8.png"),
                     content: "4:3",
+                    ratioval: '1.33'
                 },
                 {
                     id: '4',
                     img: require("@/assets/img/index-img/13.png"),
                     content: "9:16",
+                    ratioval: '0.56'
                 },
                 {
                     id: '3',
                     img: require("@/assets/img/index-img/8.png"),
                     content: "16:9",
+                    ratioval: '1.78'
                 },
             ],
             //非vip提交成功字段

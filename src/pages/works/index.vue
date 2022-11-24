@@ -5,8 +5,8 @@
       <!-- 正在进行中 -->
       <div class="current ac" v-if="taskConduct > 0">
         <div class="ac">
-          <img src="@/assets/img/1.png" class="loading-png" alt="" />
-          <span>一个绘画正在进行中</span>
+          <img src="@/assets/img/1.png" class="loading-png" alt="">
+          <span>绘画正在进行中，请下拉刷新查看</span>
         </div>
         <img
           src="@/assets/img/4.png"

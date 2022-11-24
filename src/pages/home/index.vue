@@ -99,7 +99,7 @@
       </div>
       <!-- 比例 -->
       <div class="proportion">
-        <div class="proportion-s" v-for="(el, index) in ratio" :key="el.id" @click="change(index, 'ratioIndex')">
+        <div class="proportion-s" v-for="(el, index) in ratio" :key="el.id" @click="changeratio(index, 'ratioIndex')">
           <div class="proportion-s-box">
             <img :src="el.img" alt="" :class="{ borderpubs: ratioIndex === index }" class="img1"
               style="display:block" />
@@ -302,6 +302,8 @@ export default {
       vipActive:2,   //选择通道VIP样式
       noneVipShow:false, //非vip提交成功的弹窗
       btnInnerAvtive:2,  //非vip提交成功的弹窗的vip加速动态样式
+      init_image_ratio: '', // 图片比例
+      ratioAuto: false, // 是否自动选中比例
     };
   },
 
@@ -334,12 +336,22 @@ export default {
             this.promptIndex = idx2 > -1 ? idx2 : 0
             this.promptValue = val.TextPrompt
             this.init_image = val.imageUrl
+            // 自动初始化图片比列
+            this.initAutoRatio(val.imageUrl)
           }, 200);
           this.setreDrawInfo({})
 
         }
       }, deep: true,
       immediate: true
+    },
+    // 监听是否有图片
+    init_image(val) {
+      if (val) {
+        this.ratioAuto = true
+      } else {
+        this.ratioAuto = false
+      }
     }
 
   },
@@ -348,11 +360,11 @@ export default {
   },
 
   mounted() {
-    // if (this.$route.query.debug == 1) {
-    //   new vconsole()
-    // }
-    new vconsole()  //记得打包时替换为上面
-    console.log('更新7')
+    if (this.$route.query.debug == 1) {
+      new vconsole()
+    }
+    new vconsole()
+    console.log('更新9')
     // 暴露方法给APP
     window.onPageResume = this.onPageResume   // 刷新
     window.getAppParams = this.getAppParams  // 获取用户信息
@@ -405,7 +417,6 @@ export default {
           if (Object.keys(temp).length > 0) {
             // this.userinfo = temp
             this.setUserInfo(temp)
-            this.needBuyFlag = false
             console.log('获取用户数据成功ios', this.userinfo);
           } else {
             sendMessage('jumpClientFunction', { linkType: 3000 })
@@ -427,7 +438,6 @@ export default {
       if (device.system == 'android') {
         let userinfo = sendMessage('getUserInfo')
         if (userinfo) {
-          this.needBuyFlag = false
           // this.userinfo = JSON.parse(userinfo)
           this.setUserInfo(JSON.parse(userinfo))
           console.log('获取用户数据成功', this.userinfo);
@@ -493,9 +503,48 @@ export default {
     },
 
     // 上传图片完成
-    onPhotoSelectComplete(res) {
+    async onPhotoSelectComplete(res) {
       this.init_image = decodeURIComponent(res)
       console.log('上传图片成功回调', res);
+      this.initAutoRatio(this.init_image)
+    },
+
+    // 自动初始化比列
+    async initAutoRatio(imageUrl) {
+      const bl = await this.getImgSize(imageUrl)
+      if (bl.width && bl.height) {
+        this.init_image_ratio = bl.width / bl.height
+        const arr = ['1', '0.75', '1.33', '0.56', '1.78']
+        // 查找最近的宽高比
+        const goal = this.init_image_ratio
+        const closest = arr.reduce((prev, curr) => {
+          return (Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev);
+        });
+        const idx = this.ratio.findIndex(el => el.ratioval == closest)
+        if (idx > -1) {
+          this.ratioIndex = idx
+        }
+      }
+    },
+
+
+    // 获取图片尺寸
+    getImgSize(url) {
+      return new Promise((resolve, reject) => {
+        let imgObj = new Image()
+        imgObj.src = url
+        try {
+          imgObj.onload = () => {
+            resolve({
+              width: imgObj.width,
+              height: imgObj.height
+            })
+          }
+        } catch (error) {
+          reject('错误')
+        }
+
+      })
     },
 
     /**
@@ -508,7 +557,7 @@ export default {
         return sendMessage('openToast', '请填写关键词')
       }
 
-      if (this.userinfo.buy_count == 0 || this.needBuyFlag) {
+      if (this.userinfo.buy_count == 0) {
         return this.show = true
       }
 
@@ -535,7 +584,7 @@ export default {
         if (err) {
           // 次数不足 需要购买
           if (err.code == '6010') {
-            this.needBuyFlag = true
+            this.show = true // 拉起支付
           } else if (err.code == '6011') {
             this.showTips = true
           }
@@ -590,6 +639,18 @@ export default {
       // this.drawActive = item.id
       console.log(this.drawActive,'vip')
     },
+
+    // 比列切换
+    changeratio(index) {
+      if (this.ratioAuto) {
+        return sendMessage('openToast', '为保证图片质量，上传参考图后比例不允许修改')
+      }
+      this.ratioIndex = index
+    },
+
+    // drawChanelClick(id) {
+    //   this.drawActiveId = id;
+    // },
     //提交成功的选择通道
     choosePath(item){
       if(item.id == 2){
@@ -1059,7 +1120,7 @@ color: #66C3FF;
 .success-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .success-img-box {

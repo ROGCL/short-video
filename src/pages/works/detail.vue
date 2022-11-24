@@ -138,7 +138,7 @@ export default {
 
 .img {
   width: 9.1467rem;
-  height: 9.1467rem;
+  /* height: 9.1467rem; */
   border-radius: .32rem;
   margin-bottom: .5333rem;
   object-fit: contain;
