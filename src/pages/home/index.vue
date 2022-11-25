@@ -373,7 +373,8 @@ export default {
             // this.userinfo = temp
             this.setUserInfo(temp)
             console.log('获取用户数据成功ios', this.userinfo);
-          } else {
+          } 
+          else {
             sendMessage('jumpClientFunction', { linkType: 3000 })
           }
         } else {
@@ -475,9 +476,9 @@ export default {
  */
     async startDraw() {
       //当不是vip时，直接拉起会员中心进行支付
-      if (!this.userinfo.is_vip && !this.userinfo.is_enterprise) {
-        return sendMessage('openAppPay')
-      }
+      // if (!this.userinfo.is_vip && !this.userinfo.is_enterprise) {
+      //   return sendMessage('openAppPay')
+      // }
       if (this.promptValue == '') {
         return sendMessage('openToast', '请填写关键词')
       }
@@ -499,6 +500,7 @@ export default {
         enable_face_enhance: expandSetIndex == 1 ? true : false
       }
       const [err, res] = await this.$http.post('/api/v6.Aipainting/putTask', params)
+      console.log(res,'res')
       console.log(err,'err')
       this.initForm()
       setTimeout(() => {
