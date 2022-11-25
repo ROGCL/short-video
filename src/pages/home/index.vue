@@ -346,7 +346,8 @@ export default {
       new vconsole()
     }
     new vconsole()
-    console.log('更新9')
+    console.log('更新10')
+    console.log(window.android,'安卓')
     // 暴露方法给APP
     window.onPageResume = this.onPageResume   // 刷新
     window.getAppParams = this.getAppParams  // 获取用户信息
@@ -363,6 +364,7 @@ export default {
         this.showHeight = document.body.clientHeight;
       })()
     }
+   
   },
   methods: {
     ...mapMutations(['setUserInfo', 'setreDrawInfo']),
@@ -385,11 +387,12 @@ export default {
       this.init_image = ''
       this.guideValue = 75
     },
+    //刷新用户信息(app调js)
     onPageResume() {
       this.getUserinfo()
     },
 
-    // iOS 注入用户信息
+    // iOS 注入用户信息(js调app)
     getAppParams(res) {
       console.log('设备信息', device.system);
       if (device.system == 'ios') {
@@ -409,13 +412,14 @@ export default {
       }
     },
 
-    // 原生app支付成功
+    // 原生app支付成功(app调js)
     onPaySuccess(res) {
       this.getUserinfo()
     },
     /**
      * 获取用户信息，如果没有用户信息表示没有登录；需要跳转登录
      */
+    //js调app安卓获取用户信息
     getUserinfo() {
       if (device.system == 'android') {
         let userinfo = sendMessage('getUserInfo')
@@ -429,7 +433,7 @@ export default {
       }
     },
 
-    // 获取套餐信息
+    // 获取套餐信息(原生调app)
     async getCombsInfo() {
       const [err, res] = await this.$http.post(`api/v6.Aipainting/combos`, {
         platform: device.system,
@@ -442,7 +446,7 @@ export default {
 
     },
 
-    // 点击支付获取支付信息
+    // 点击支付获取支付信息(原生调app)
     async buy() {
       // 安卓走接口
       this.show = false
@@ -531,7 +535,7 @@ export default {
 
     /**
  * 点击开始绘画
- * buy_count 为0 就需要拉起支付
+ * buy_count 为0 就需要拉起支付(js调app支付)
  */
     async startDraw() {
 
@@ -539,7 +543,7 @@ export default {
         return sendMessage('openToast', '请填写关键词')
       }
 
-      if (this.userinfo.buy_count == 0) {
+      if (this.userinfo.buy_count == 0 || this.needBuyFlag) {
         return this.show = true
       }
 

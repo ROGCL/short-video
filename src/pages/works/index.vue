@@ -26,12 +26,12 @@
         </div>
       </div>
 
-      <!-- 非vip排队中的提醒 -->
+      <!-- 非vip排队中的提醒
       <div class="notVip current" v-show="this.info !== ''">
         <h4>排队倒计时...</h4>
         <div class="turnBuy">VIP免排队</div>
         <div class="delBtn" @click="show = true"></div>
-      </div>
+      </div> -->
 
       <!-- 瀑布流 -->
       <template v-if="list.length > 0">
