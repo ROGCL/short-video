@@ -177,42 +177,6 @@
     </div>
     <!-- 弹出层，当没有次数时弹出,有次数直接打开编辑页面 -->
     <div>
-      <van-popup v-model="show" position="bottom" :style="{ height: '55%', background: '#000' }">
-        <!-- 头部压层 -->
-        <div class="popup-header">
-          <span @click="show = false"></span>
-          <h4>AI绘画会员包</h4>
-        </div>
-        <!-- 下方版心 -->
-        <div class="bottom-container">
-          <!-- 价格目录 -->
-          <div class="popup-price-outside-box">
-            <div class="popup-price" v-for="(item, index) in combos" :key="item.id"
-              :class="{ popuppricechoosepublic: combosActive === index }" @click="combosActiveClick(item, index)">
-              <h6 class="tuijian" v-show="index == 0">推荐购</h6>
-              <!-- 制作次数 -->
-              <h3>{{ item.title }}</h3>
-              <h4>￥<span>{{ item.price }}</span></h4>
-              <!-- 描述文字 -->
-              <h5>{{ item.hint1 }}</h5>
-            </div>
-          </div>
-          <!-- 支付方式 -->
-          <div class="paypal-outside" v-show="device.system == 'android'">
-            <div class="paypal" v-for="items in payType" :key="items.id" @click="paychange(items.id, 'payTypeActived')">
-              <img :src="items.icon" alt="" class="zfb">
-              <span>{{ items.name }}</span>
-              <img :src="require(`@/assets/img/popup/${payTypeActived == items.id ? 4 : 3}.png`)" alt="" class="true">
-            </div>
-          </div>
-          <!-- 立即购买按钮 -->
-          <div class="buy" @click="buy">立即购买
-          </div>
-          <!-- 文字框 -->
-          <!-- <div class="notice" v-show="device.system == 'android'">已阅读并同意<a>《会员服务协议》</a>
-          </div> -->
-        </div>
-      </van-popup>
 
       <van-popup v-model="shadow" class="shadow" :close-on-click-overlay="false">
         <div class="loading-wrapper" v-show="loading">
@@ -286,6 +250,8 @@ export default {
       needBuyFlag: false, // 是否需要购买
       init_image_ratio: '', // 图片比例
       ratioAuto: false, // 是否自动选中比例
+      is_vip:"", //是否是vip第一个字段
+      is_enterprise:""  //是否是vip第二个字段
     };
   },
 
@@ -347,7 +313,6 @@ export default {
     }
     new vconsole()
     console.log('更新10')
-    console.log(window.android,'安卓')
     // 暴露方法给APP
     window.onPageResume = this.onPageResume   // 刷新
     window.getAppParams = this.getAppParams  // 获取用户信息
@@ -355,8 +320,8 @@ export default {
     window.onPhotoSelectComplete = this.onPhotoSelectComplete  // 上传图片完成
     // 获取APP参数
     this.getUserinfo()
-    // 获取套餐信息
-    this.getCombsInfo()
+    // // 获取套餐信息
+    // this.getCombsInfo()
 
     // window.onresize监听页面高度的变化
     window.onresize = () => {
@@ -367,6 +332,7 @@ export default {
    
   },
   methods: {
+    // 注册vuex
     ...mapMutations(['setUserInfo', 'setreDrawInfo']),
     /**
      * 暴露给APP的方法
@@ -399,6 +365,9 @@ export default {
         console.log('获取getAppParams数据', res);
         if (res && JSON.parse(res).userInfo) {
           let temp = JSON.parse(res).userInfo
+          this.is_vip = temp.is_vip
+          this.is_enterprise = temp.is_enterprise
+          console.log(this.is_enterprise,'vip是否')
           if (Object.keys(temp).length > 0) {
             // this.userinfo = temp
             this.setUserInfo(temp)
@@ -413,9 +382,9 @@ export default {
     },
 
     // 原生app支付成功(app调js)
-    onPaySuccess(res) {
-      this.getUserinfo()
-    },
+    // onPaySuccess(res) {
+    //   this.getUserinfo()
+    // },
     /**
      * 获取用户信息，如果没有用户信息表示没有登录；需要跳转登录
      */
@@ -426,47 +395,12 @@ export default {
         if (userinfo) {
           // this.userinfo = JSON.parse(userinfo)
           this.setUserInfo(JSON.parse(userinfo))
+          this.is_vip = this.userinfo.is_vip
+          this.is_enterprise = this.userinfo.is_enterprise
           console.log('获取用户数据成功', this.userinfo);
         } else {
           sendMessage('jumpClientFunction', { linkType: 3000 })
         }
-      }
-    },
-
-    // 获取套餐信息(原生调app)
-    async getCombsInfo() {
-      const [err, res] = await this.$http.post(`api/v6.Aipainting/combos`, {
-        platform: device.system,
-        uuid: this.userinfo.uuid
-      })
-      if (err) return
-      this.combos = res.combos
-      // 设置默认选择的支付套餐
-      this.comboActive = res.combos[0]
-
-    },
-
-    // 点击支付获取支付信息(原生调app)
-    async buy() {
-      // 安卓走接口
-      this.show = false
-      if (device.system == 'android') {
-        let params = {
-          pay_type: this.payTypeActived == 1 ? 'ali' : "wx",
-          combo_id: this.comboActive.id,
-          platform: device.system,
-          uuid: this.userinfo.uuid
-        }
-        // let params = { "pay_type": "ali", "combo_id": 65, "platform": "android", "uuid": "6226b6b2596751335d449522" }
-        const [err, res] = await this.$http.post('api/v6.Aipainting/order', params)
-        console.log('支付参数 ', res);
-        if (err) return
-        let payFun = this.payTypeActived == 1 ? 'openAliPay' : 'openWxPay'
-        let payData = this.payTypeActived == 1 ? res.pay_url : res.pay_data
-        sendMessage(payFun, payData)
-      } else if (device.system == 'ios') {
-        //ios走本地方法
-        sendMessage('openInternalPurchase', this.comboActive)
       }
     },
     // 跳转
@@ -539,14 +473,14 @@ export default {
  */
     async startDraw() {
 
+
+      //当不是vip时，直接拉起会员中心进行支付
+      if (this.is_vip == 0 && this.is_enterprise == 0) {
+        return sendMessage('openAppPay')
+      }
       if (this.promptValue == '') {
         return sendMessage('openToast', '请填写关键词')
       }
-
-      if (this.userinfo.buy_count == 0 || this.needBuyFlag) {
-        return this.show = true
-      }
-
       this.shadow = true
       this.loading = true
       let { styleList, styleIndex, ratio, ratioIndex, tabs, tabActiveIndex, init_image, userinfo, promptValue, guideValue, expandSetIndex, artistIndex, artistList } = this
@@ -567,11 +501,13 @@ export default {
       const [err, res] = await this.$http.post('/api/v6.Aipainting/putTask', params)
       this.initForm()
       setTimeout(() => {
+        //如果多次点击，拉起正在有绘画进行中的弹窗
         if (err) {
-          // 次数不足 需要购买
-          if (err.code == '6010') {
-            this.show = true // 拉起支付
-          } else if (err.code == '6011') {
+          // 次数不足 需要购买，此处后期更改直接跳转会员中心页面
+          // if (err.code == '6010') {
+          //   sendMessage('openAppPay') // 拉起会员中心支付
+          // } else 
+          if (err.code == '6011') {
             this.showTips = true
           }
           this.shadow = false
