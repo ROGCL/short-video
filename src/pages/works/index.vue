@@ -42,6 +42,7 @@
             finished-text="没有更多了"
             @load="loadmore"
             :immediate-check="false"
+            
           >
             <div class="content">
               <div
@@ -71,10 +72,11 @@
               </div>
             </div>
           </van-list>
+    
         </van-pull-refresh>
       </template>
 
-      <template v-else>
+        <template v-else>
         <div class="no-data">
           <img src="@/assets/img/2.png" class="no-data-img" alt="" />
           <div class="text">还没有作品哦</div>
@@ -196,7 +198,6 @@ export default {
 
 <style scoped>
 .wrapper {
-  min-height: .6667rem;
   padding: 0.2667rem 0.4267rem;
   box-sizing: border-box;
 }
@@ -413,5 +414,8 @@ export default {
   background: linear-gradient(135deg, #506cff 0%, #66c3ff 51%, #33e1d7 100%);
   color: #fff;
   margin-left: 0.3467rem;
+}
+.wrapper .van-list{
+  min-height: 100vh
 }
 </style>

@@ -478,9 +478,6 @@ export default {
       // if (this.is_vip == 0 && this.is_enterprise == 0) {
       //   return sendMessage('openAppPay')
       // }
-      if (this.userinfo.is_vip == undefined && this.userinfo.is_enterprise == undefined) {
-        return sendMessage('openAppPay')
-      }
       if (this.promptValue == '') {
         return sendMessage('openToast', '请填写关键词')
       }
@@ -502,15 +499,15 @@ export default {
         enable_face_enhance: expandSetIndex == 1 ? true : false
       }
       const [err, res] = await this.$http.post('/api/v6.Aipainting/putTask', params)
+      console.log(err,'err')
       this.initForm()
       setTimeout(() => {
         //如果多次点击，拉起正在有绘画进行中的弹窗
         if (err) {
           // 次数不足 需要购买，此处后期更改直接跳转会员中心页面
-          // if (err.code == '6010') {
-          //   sendMessage('openAppPay') // 拉起会员中心支付
-          // } else 
-          if (err.code == '6011') {
+          if (err.code == '6010') {
+              return sendMessage('openAppPay')
+          } else if (err.code == '6011') {
             this.showTips = true
           }
           this.shadow = false
