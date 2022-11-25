@@ -27,7 +27,7 @@
       </div>
 
       <!-- 非vip排队中的提醒 -->
-      <div class="notVip current">
+      <div class="notVip current" v-show="this.info !== ''">
         <h4>排队倒计时...</h4>
         <div class="turnBuy">VIP免排队</div>
         <div class="delBtn" @click="show = true"></div>
@@ -112,10 +112,12 @@ export default {
       pageSize: 50,
       list: [],
       taskConduct: 0,
+      info:{}
     };
   },
   mounted() {
     this.getList();
+    
     console.log("%cindex.vue line:95 1", "color: #007acc;", 1);
   },
   computed: {
@@ -143,6 +145,7 @@ export default {
       this.getList();
     },
     async getList() {
+      this.info = sessionStorage.getItem('userinfo')
       // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
       const [err, res] = await this.$http.post("api/v6.Aipainting/showTask", {

@@ -8,6 +8,7 @@
         <div></div>
         <div class="nav-title">AI绘画</div>
         <div class="nav-title2" @click="goworks('/works')">作品</div>
+        <div class="small-point" v-show="worksPointShow">1</div>
       </div>
       <div class="cutting ajc">
         <!-- 通用,漫画,写意切换栏 -->
@@ -155,9 +156,10 @@
       </div>
       <div class="path-road">
         <div class="normal width-public" v-for="item in drawChanels" :key="item.id"
-          :class="{ borderpubs: drawActiveId === item.id }" @click="drawChanelClick(item)">
+          :class="{ borderpubs: drawActiveId === item.id }" @click="drawChanelChoose(item)">
           <img :src="item.img" alt="" />
-          <h5 class="h5-pub" :class="{vipActive:vipActive == item.id}">{{item.h5}}</h5>
+          <h5 class="h5-pub" v-if="item.id == 1" style="color:#fff">普通</h5>
+          <h5 class="h5-pub vipActive" v-else>VIP加速</h5>
           <h6 class="h6-pub" v-if="item.id == 1">预计排队99999人</h6>
           <h6 class="h6-pub" v-else>{{ item.h6 }}</h6>
           <!-- 超快压层 -->
@@ -280,7 +282,7 @@ export default {
       hideshow: true,  //显示或者隐藏footer
       device: device,
       artistIndex: -1, // 艺术家选择
-      drawActiveId: 1,   // 选择绘画通道的方式
+      drawActiveId: 0,   // 选择绘画通道的方式
       expandSetIndex: -1, // 智能拓展
       setupSetIndex: -1,  // 步数设置
       guideValue: 75,  // 引导力度
@@ -304,6 +306,8 @@ export default {
       btnInnerAvtive:2,  //非vip提交成功的弹窗的vip加速动态样式
       init_image_ratio: '', // 图片比例
       ratioAuto: false, // 是否自动选中比例
+      buy_count:"", //是否是vip（是否有购买次数）字段
+      worksPointShow:false  //任务提交成功后，作品栏的小圆点
     };
   },
 
@@ -440,6 +444,7 @@ export default {
         if (userinfo) {
           // this.userinfo = JSON.parse(userinfo)
           this.setUserInfo(JSON.parse(userinfo))
+          this.buy_count = this.userinfo.buy_count
           console.log('获取用户数据成功', this.userinfo);
         } else {
           sendMessage('jumpClientFunction', { linkType: 3000 })
@@ -552,17 +557,6 @@ export default {
  * buy_count 为0 就需要拉起支付
  */
     async startDraw() {
-
-      if (this.promptValue == '') {
-        return sendMessage('openToast', '请填写关键词')
-      }
-
-      if (this.userinfo.buy_count == 0) {
-        return this.show = true
-      }
-
-      this.shadow = true
-      this.loading = true
       let { styleList, styleIndex, ratio, ratioIndex, tabs, tabActiveIndex, init_image, userinfo, promptValue, guideValue, expandSetIndex, artistIndex, artistList } = this
       let params = {
         prompt: promptValue,  //关键词
@@ -578,22 +572,51 @@ export default {
         is_last_layer_skip: expandSetIndex == 0 ? true : false,
         enable_face_enhance: expandSetIndex == 1 ? true : false
       }
-      const [err, res] = await this.$http.post('/api/v6.Aipainting/putTask', params)
+      if (this.promptValue == '') {
+        return sendMessage('openToast', '请填写关键词')
+      }
+      //这里是不走请求的
+       //这里的判断为当用户购买次数为0时，同时选择的时vip通道(直接拉起支付)
+      if (this.userinfo.buy_count == 0 && this.drawActiveId == 2) {
+        return this.show = true
+        //当次数为0，且选择普通通道时(假执行一次，且直接返回出去不执行接口逻辑，存储提交的数据)
+      }else if(this.userinfo.buy_count == 0 && this.drawActiveId == 1){
+        sessionStorage.setItem('userinfo',JSON.stringify(params))
+        setTimeout(()=>{
+          
+          this.shadow = true
+          this.noneVipShow = true
+          this.worksPointShow = true
+          this.initForm()  //提交成功之后清空数据
+          return
+        },2000)
+          }
+          
+      this.shadow = true
+      this.loading = true
+      
+
+        const [err, res] = await this.$http.post('/api/v6.Aipainting/putTask', params)
+
+      //重置表单
       this.initForm()
       setTimeout(() => {
         if (err) {
-          // 次数不足 需要购买
-          if (err.code == '6010') {
+          // 次数不足 需要购买（次数不足且选的是vip通道时）
+          if (err.code == '6010' && this.drawActiveId == 2) {
             this.show = true // 拉起支付
           } else if (err.code == '6011') {
+            // 当前已经有绘画任务 提示弹窗
             this.showTips = true
           }
+          // 关闭加载层
           this.shadow = false
           return
         }
+        // 请求成功
+        this.worksPointShow = true
         this.loading = false
       }, 2000);
-
     },
 
     // 选择套餐
@@ -633,7 +656,7 @@ export default {
       this.payTypeActived = val
     },
     //切换选择的通道
-    drawChanelClick(item) {
+    drawChanelChoose(item) {
       this.drawActiveId = item.id;
       //赋默认值
       // this.drawActive = item.id
@@ -657,7 +680,9 @@ export default {
         this.show = true
         this.noneVipShow = false
       }else{
-        this.$router.push('/works')
+        this.noneVipShow = false
+
+        // this.$router.push('/works')
       }
     }
   },
@@ -1157,7 +1182,7 @@ color: #66C3FF;
   left: 1.2267rem;
   top: 0.4267rem;
   font-size: 0.4267rem;
-  color: #fff;
+  /* color: #fff; */
 }
 
 .h6-pub {
@@ -1512,7 +1537,7 @@ color: #66C3FF;
 }
 
 .nav-title2 {
-
+  position: relative;
   font-size: .3733rem;
   /* border-image: linear-gradient(135deg,
       rgba(80, 108, 255, 1),
@@ -1522,7 +1547,19 @@ color: #66C3FF;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-
+.small-point{
+  position: absolute;
+  left: 9.3067rem;
+  top: .16rem;
+  width: .4267rem;
+  height: .4267rem;
+  background: #FF4848;
+  border-radius: .4267rem;
+  color: #fff;
+  font-size: .2667rem;
+  text-align: center;
+  line-height: .4267rem;
+}
 .set-wrapper {
   display: flex;
 }
