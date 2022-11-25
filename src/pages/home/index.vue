@@ -475,9 +475,9 @@ export default {
  */
     async startDraw() {
       //当不是vip时，直接拉起会员中心进行支付
-      // if (this.is_vip == 0 && this.is_enterprise == 0) {
-      //   return sendMessage('openAppPay')
-      // }
+      if (!this.userinfo.is_vip && !this.userinfo.is_enterprise) {
+        return sendMessage('openAppPay')
+      }
       if (this.promptValue == '') {
         return sendMessage('openToast', '请填写关键词')
       }
@@ -506,7 +506,7 @@ export default {
         if (err) {
           // 次数不足 需要购买，此处后期更改直接跳转会员中心页面
           if (err.code == '6010') {
-              return sendMessage('openAppPay')
+              sendMessage('openAppPay')
           } else if (err.code == '6011') {
             this.showTips = true
           }
