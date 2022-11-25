@@ -34,58 +34,49 @@
       </div> -->
       <!-- <template v-if="list.length > 0"> -->
       <!-- 瀑布流 -->
-      <template v-if="list.length > 0">
-        <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-          <van-list
-            v-model="loading"
-            :finished="finished"
-            finished-text="没有更多了"
-            @load="loadmore"
-            :immediate-check="false"
-          >
-            <div class="content">
+      <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          :finished-text="list.length > 0 ? '没有更多了' : ''"
+          @load="loadmore"
+          :immediate-check="false"
+        >
+          <div class="content" v-if="list.length > 0">
+            <div
+              class="img-container"
+              @click="go(item)"
+              v-for="(item, index) in list"
+              :key="index"
+            >
+              <img
+                class="img-style"
+                :src="item.imageUrl ? item.imageUrl : imgerr"
+                alt="1"
+              />
               <div
-                class="img-container"
-                @click="go(item)"
-                v-for="(item, index) in list"
-                :key="index"
+                class="save ajc"
+                v-if="item.imageUrl"
+                @click.stop="save(item.imageUrl)"
               >
-                <img
-                  class="img-style"
-                  :src="item.imageUrl ? item.imageUrl : imgerr"
-                  alt="1"
-                />
-                <div
-                  class="save ajc"
-                  v-if="item.imageUrl"
-                  @click.stop="save(item.imageUrl)"
-                >
-                  保存
-                </div>
-                <img
-                  src="@/assets/img/new.png"
-                  class="newimg"
-                  alt=""
-                  v-show="index == 0"
-                />
+                保存
               </div>
+              <img
+                src="@/assets/img/new.png"
+                class="newimg"
+                alt=""
+                v-show="index == 0"
+              />
             </div>
-          </van-list>
-        </van-pull-refresh>
-      </template>
+          </div>
 
-      <template v-else>
-        <div class="no-data">
-          <img src="@/assets/img/2.png" class="no-data-img" alt="" />
-          <div class="text">还没有作品哦</div>
-          <div class="btn" @click="back">去制作</div>
-        </div>
-        <!-- <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-          <van-list>
-            
-          </van-list>
-        </van-pull-refresh> -->
-      </template>
+          <div class="no-data" v-else>
+            <img src="@/assets/img/2.png" class="no-data-img" alt="" />
+            <div class="text">还没有作品哦</div>
+            <div class="btn" @click="back">去制作</div>
+          </div>
+        </van-list>
+      </van-pull-refresh>
     </div>
 
     <!-- 取消弹窗 -->
