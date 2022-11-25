@@ -311,7 +311,7 @@ export default {
     if (this.$route.query.debug == 1) {
       new vconsole()
     }
-    // new vconsole()
+    new vconsole()
     console.log('更新12')
     // 暴露方法给APP
     window.onPageResume = this.onPageResume   // 刷新
