@@ -35,7 +35,7 @@
 
       <!-- 瀑布流 -->
       <template v-if="list.length > 0">
-        <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+        <van-pull-refresh v-model="refreshing" @refresh="onRefresh" pull-distance=".6667rem">
           <van-list
             v-model="loading"
             :finished="finished"
@@ -184,9 +184,11 @@ export default {
         uuid: this.userinfo.uuid,
         platform: device.system,
       });
+      console.log(res,'取消')
       if (err) return;
-      this.page = 1;
       this.getList();
+      this.page = 1;
+      
     },
   },
 };
@@ -194,6 +196,7 @@ export default {
 
 <style scoped>
 .wrapper {
+  min-height: .6667rem;
   padding: 0.2667rem 0.4267rem;
   box-sizing: border-box;
 }

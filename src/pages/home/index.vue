@@ -312,7 +312,7 @@ export default {
       new vconsole()
     }
     new vconsole()
-    console.log('更新10')
+    console.log('更新12')
     // 暴露方法给APP
     window.onPageResume = this.onPageResume   // 刷新
     window.getAppParams = this.getAppParams  // 获取用户信息
@@ -365,8 +365,9 @@ export default {
         console.log('获取getAppParams数据', res);
         if (res && JSON.parse(res).userInfo) {
           let temp = JSON.parse(res).userInfo
-          this.is_vip = temp.is_vip
-          this.is_enterprise = temp.is_enterprise
+          // let is_vip = this.userInfo.is_vip
+          // let is_enterprise = this.userInfo.is_enterprise
+          // this.is_enterprise = temp.is_enterprise
           console.log(this.is_enterprise,'vip是否')
           if (Object.keys(temp).length > 0) {
             // this.userinfo = temp
@@ -392,11 +393,12 @@ export default {
     getUserinfo() {
       if (device.system == 'android') {
         let userinfo = sendMessage('getUserInfo')
+        console.log('%cindex.vue line:396 userinfo', 'color: #007acc;', userinfo);
         if (userinfo) {
           // this.userinfo = JSON.parse(userinfo)
           this.setUserInfo(JSON.parse(userinfo))
-          this.is_vip = this.userinfo.is_vip
-          this.is_enterprise = this.userinfo.is_enterprise
+          // this.is_vip = this.userinfo.is_vip
+          // this.is_enterprise = this.userinfo.is_enterprise
           console.log('获取用户数据成功', this.userinfo);
         } else {
           sendMessage('jumpClientFunction', { linkType: 3000 })
@@ -472,10 +474,11 @@ export default {
  * buy_count 为0 就需要拉起支付(js调app支付)
  */
     async startDraw() {
-
-
       //当不是vip时，直接拉起会员中心进行支付
-      if (this.is_vip == 0 && this.is_enterprise == 0) {
+      // if (this.is_vip == 0 && this.is_enterprise == 0) {
+      //   return sendMessage('openAppPay')
+      // }
+      if (this.userinfo.is_vip == undefined && this.userinfo.is_enterprise == undefined) {
         return sendMessage('openAppPay')
       }
       if (this.promptValue == '') {
