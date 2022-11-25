@@ -7,7 +7,7 @@
       <div class="top-nav">
         <div></div>
         <div class="nav-title">AI绘画</div>
-        <div class="nav-title2" @click="goworks('/works')">作品</div>
+        <div class="nav-title2" @click="goworks">作品</div>
       </div>
       <div class="cutting ajc">
         <!-- 通用,漫画,写意切换栏 -->
@@ -411,9 +411,11 @@ export default {
       this.$router.push(path)
     },
     // 去作品
-    goworks(path) {
+    goworks() {
       this.$route.meta.keepAlive = false
-      this.go(path)
+      this.$router.push({path:'/works',query:{
+        init_image:this.init_image
+      }})
     },
     // 点击弹窗 我知道了
     know() {
