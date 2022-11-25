@@ -5,8 +5,8 @@
       <!-- 正在进行中 -->
       <div class="current ac" v-if="taskConduct > 0">
         <div class="ac">
-          <img src="@/assets/img/1.png" class="loading-png" alt="">
-          <span>绘画正在进行中，请下拉刷新查看</span>
+          <img src="@/assets/img/1.png" class="loading-png" alt="" />
+          <span @click="onRefresh">绘画正在进行中，请下拉刷新查看</span>
         </div>
         <img
           src="@/assets/img/4.png"
@@ -32,17 +32,16 @@
         <div class="turnBuy">VIP免排队</div>
         <div class="delBtn" @click="show = true"></div>
       </div> -->
-
+      <!-- <template v-if="list.length > 0"> -->
       <!-- 瀑布流 -->
       <template v-if="list.length > 0">
-        <van-pull-refresh v-model="refreshing" @refresh="onRefresh" pull-distance=".6667rem">
+        <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
           <van-list
             v-model="loading"
             :finished="finished"
             finished-text="没有更多了"
             @load="loadmore"
             :immediate-check="false"
-            
           >
             <div class="content">
               <div
@@ -72,16 +71,20 @@
               </div>
             </div>
           </van-list>
-    
         </van-pull-refresh>
       </template>
 
-        <template v-else>
+      <template v-else>
         <div class="no-data">
           <img src="@/assets/img/2.png" class="no-data-img" alt="" />
           <div class="text">还没有作品哦</div>
           <div class="btn" @click="back">去制作</div>
         </div>
+        <!-- <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+          <van-list>
+            
+          </van-list>
+        </van-pull-refresh> -->
       </template>
     </div>
 
@@ -110,16 +113,17 @@ export default {
       loading: false,
       finished: false,
       refreshing: false,
+      refresh: false,
       page: 1,
-      pageSize: 50,
+      pageSize: 150,
       list: [],
       taskConduct: 0,
-      info:{}
+      info: {},
     };
   },
   mounted() {
     this.getList();
-    this.getStorage()  //获取存储的信息
+    this.getStorage(); //获取存储的信息
     console.log("%cindex.vue line:95 1", "color: #007acc;", 1);
   },
   computed: {
@@ -127,9 +131,7 @@ export default {
   },
   methods: {
     //获取存储信息
-    getStorage(){
-
-    },
+    getStorage() {},
     back() {
       // const backLength = window.history.length - 1
       window.history.back();
@@ -144,14 +146,21 @@ export default {
     onRefresh() {
       // 清空列表数据
       this.finished = false;
+      this.refreshing = true;
       this.page = 1;
       // this.list = []
-      this.taskConduct = 0;
+      // this.taskConduct = 0;
       // 重新加载数据
       this.getList();
     },
+    reFresh() {
+      this.finished = false;
+      this.page = 1;
+      this.taskConduct = 0;
+      this.getList();
+    },
     async getList() {
-      console.log(this.info,'info')
+      console.log(this.info, "info");
       // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
       const [err, res] = await this.$http.post("api/v6.Aipainting/showTask", {
@@ -186,11 +195,13 @@ export default {
         uuid: this.userinfo.uuid,
         platform: device.system,
       });
-      console.log(res,'取消')
+      console.log(res, "取消");
       if (err) return;
       this.getList();
       this.page = 1;
-      
+    },
+    freshPage() {
+      this.reFresh();
     },
   },
 };
@@ -415,7 +426,7 @@ export default {
   color: #fff;
   margin-left: 0.3467rem;
 }
-.wrapper .van-list{
-  min-height: 100vh
+.wrapper .van-list {
+  min-height: 100vh;
 }
 </style>
