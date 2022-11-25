@@ -181,7 +181,7 @@
     </div>
     <!-- 弹出层，当没有次数时弹出,有次数直接打开编辑页面 -->
     <div>
-      <van-popup v-model="show" position="bottom" :style="{ height: '55%', background: '#000' }">
+      <van-popup v-model="show" position="bottom" :style="{ height: '50%', background: '#000' }">
         <!-- 头部压层 -->
         <div class="popup-header">
           <span @click="show = false"></span>
@@ -1465,7 +1465,7 @@ color: #66C3FF;
 
 .paypal {
   position: relative;
-  margin-top: 1.0667rem;
+  margin-top: .4rem;
   width: 2.32rem;
   height: .5333rem;
 }
