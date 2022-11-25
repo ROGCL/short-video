@@ -91,7 +91,14 @@ export default {
   mounted() {
     window.onSaveComplete = this.onSaveComplete
     this.getData()
+    //事件总线接收数据
+    this.$bus.$on('init_image',(data)=>{
+      console.log(data,'我接受到了图片的数据')
+    })
   },
+  // beforeDestroy(){
+  //   this.$bus.$off('init_image')
+  // },
   methods: {
     ...mapMutations(['setreDrawInfo']),
     go() {
