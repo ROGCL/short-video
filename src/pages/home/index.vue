@@ -462,7 +462,7 @@ export default {
       this.combos = res.combos
       // 设置默认选择的支付套餐
       this.comboActive = res.combos[0]
-
+      console.log(this.combos,'套餐')
     },
 
     // 点击支付获取支付信息
@@ -496,6 +496,7 @@ export default {
     goworks(path) {
       this.$route.meta.keepAlive = false
       this.go(path)
+
     },
     // 点击弹窗 我知道了
     know() {

@@ -29,7 +29,7 @@
       <!-- 非vip排队中的提醒 -->
       <div class="notVip current" v-show="this.info !== ''">
         <h4>排队倒计时...</h4>
-        <div class="turnBuy">VIP免排队</div>
+        <div class="turnBuy" @click="turnCombos">VIP免排队</div>
         <div class="delBtn" @click="show = true"></div>
       </div>
 
@@ -93,14 +93,17 @@
         </div>
       </div>
     </van-popup>
+
   </div>
 </template>
 
 <script>
 import { sendMessage, device } from "@/util/initChat";
 import { mapState } from "vuex";
+import myMin from '@/pages/home/js/index'
 export default {
   name: "works",
+  mixins: [myMin],
   data() {
     return {
       show: false,
@@ -112,7 +115,8 @@ export default {
       pageSize: 50,
       list: [],
       taskConduct: 0,
-      info:{}
+      info:{},
+      combos:[],
     };
   },
   mounted() {
@@ -185,6 +189,9 @@ export default {
       this.page = 1;
       this.getList();
     },
+    turnCombos(){
+      this.shadow = true
+    }
   },
 };
 </script>
