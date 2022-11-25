@@ -2,7 +2,7 @@ import _ from "axios";
 import { Toast } from 'vant';
 import 'vant/lib/toast/style';
 const axios = _.create({
-    baseURL: 'http://video.chucitech.cn/',
+    baseURL: 'http://video.chucitech.cn/123',
     // process.env.NODE_ENV === "development"
     //   ? "http://cat.fwyouni.com/api"
     //   : process.env.REACT_APP_PROXY,
