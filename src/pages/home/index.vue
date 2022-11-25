@@ -572,8 +572,12 @@ export default {
         is_last_layer_skip: expandSetIndex == 0 ? true : false,
         enable_face_enhance: expandSetIndex == 1 ? true : false
       }
+      //判断两个必要条件，选择关键词和通道，通道好做后面的请求
       if (this.promptValue == '') {
         return sendMessage('openToast', '请填写关键词')
+      }
+      if(this.drawActiveId == 0){
+        return sendMessage('openToast','请选择通道')
       }
       //这里是不走请求的
        //这里的判断为当用户购买次数为0时，同时选择的时vip通道(直接拉起支付)

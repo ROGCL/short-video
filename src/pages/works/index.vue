@@ -146,6 +146,7 @@ export default {
     },
     async getList() {
       this.info = sessionStorage.getItem('userinfo')
+      console.log(this.info,'info')
       // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
       const [err, res] = await this.$http.post("api/v6.Aipainting/showTask", {
