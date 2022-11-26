@@ -416,7 +416,6 @@ export default {
       this.$router.push({path:'/works',query:{
         init_image:this.init_image
       }})
-      // this.$bus.$emit('init_image',this.init_image)
     },
     // 点击弹窗 我知道了
     know() {
