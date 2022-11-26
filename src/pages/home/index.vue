@@ -259,9 +259,8 @@ export default {
     // 设置不同引擎的关键词
     tabActiveIndex: {
       handler: function (index) {
-        this.initForm()
         this.promptActiveList = this.promptList[this.tabs[index].value]
-
+        this.initForm()
       }, immediate: true,
       deep: true
     },
@@ -283,9 +282,12 @@ export default {
           setTimeout(() => {
             this.promptIndex = idx2 > -1 ? idx2 : 0
             this.promptValue = val.TextPrompt
-            this.init_image = val.imageUrl
+            if(val.InitImagePath){
+              this.init_image = val.InitImagePath
             // 自动初始化图片比列
-            this.initAutoRatio(val.imageUrl)
+            this.initAutoRatio(val.InitImagePath)
+            }
+           
           }, 200);
           this.setreDrawInfo({})
 
@@ -342,7 +344,7 @@ export default {
     // 重置表单
     initForm() {
       this.promptIndex = 0
-      this.promptValue = ''
+      this.promptValue = this.promptActiveList[this.promptIndex].content
       // 漫画没有艺术家和风格
       this.artistIndex = -1
       this.styleIndex = -1
@@ -532,8 +534,9 @@ export default {
     promptChange(index) {
       console.log(this.promptActiveList[0].content)
       if (this.promptIndex == index) {
-        this.promptValue = this.promptActiveList[0].content     //promptValue是输入框的v-model
         this.promptIndex = 0
+        this.promptValue = this.promptActiveList[this.promptIndex].content     //promptValue是输入框的v-model
+        
       } else {
         this.promptValue = this.promptActiveList[index].content
         this.promptIndex = index;

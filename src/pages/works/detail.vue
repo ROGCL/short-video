@@ -83,6 +83,7 @@ export default {
       if (val) {
         text = `有`
       }
+      return text
     }
   },
   computed: {
