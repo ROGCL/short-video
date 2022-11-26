@@ -240,7 +240,7 @@ export default {
       styleIndex: -1, // 风格选择
       ratioIndex: -1,  // 比例选择
       init_image: "",  // 参考图
-      promptIndex: -1, // 关键词默认选择第一个
+      promptIndex: 0, // 关键词默认选择第一个
       promptValue: '',  // 关键词的value
       promptActiveList: [], // 当前引擎选择的关键词
       // userinfo: {}, // 用户信息
@@ -341,7 +341,7 @@ export default {
 
     // 重置表单
     initForm() {
-      this.promptIndex = -1
+      this.promptIndex = 0
       this.promptValue = ''
       // 漫画没有艺术家和风格
       this.artistIndex = -1
@@ -530,9 +530,10 @@ export default {
 
     // 关键词切换
     promptChange(index) {
+      console.log(this.promptActiveList[0].content)
       if (this.promptIndex == index) {
-        this.promptValue = ''
-        this.promptIndex = -1
+        this.promptValue = this.promptActiveList[0].content     //promptValue是输入框的v-model
+        this.promptIndex = 0
       } else {
         this.promptValue = this.promptActiveList[index].content
         this.promptIndex = index;
