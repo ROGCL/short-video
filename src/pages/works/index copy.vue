@@ -115,6 +115,7 @@ export default {
   mounted() {
     this.getList();
     this.getStorage(); //获取存储的信息
+    console.log("%cindex.vue line:95 1", "color: #007acc;", 1);
   },
   computed: {
     ...mapState(["userinfo"]),
@@ -150,6 +151,7 @@ export default {
       this.getList();
     },
     async getList() {
+      console.log(this.info, "info");
       // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
       const [err, res] = await this.$http.post("api/v6.Aipainting/showTask", {
@@ -289,8 +291,6 @@ export default {
 }
 
 .content {
-  /* display: flex;
-  flex-wrap: wrap; */
   column-count: 2;
   column-gap: 0.2667rem;
   position: relative;
@@ -305,16 +305,13 @@ export default {
 
 .img-container:nth-child(2n + 1) {
   /* padding-left: .1333rem; */
-  /* padding-right: 0.0667rem; */
-  order: 1;
+  padding-right: 0.0667rem;
 }
 
 .img-container:nth-child(2n) {
   /* padding-left: .0667rem; */
-  /* padding-right: 0.1333rem; */
+  padding-right: 0.1333rem;
   /* margin-left: -12px; */
-  order: 2;
-  
 }
 
 .img-container .img-style {
