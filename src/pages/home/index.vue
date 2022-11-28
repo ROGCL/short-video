@@ -865,6 +865,7 @@ export default {
     selectChoose(item) {
       if (item.id == 1) {
         this.noneVipShowTips = false;
+        this.shadow = false
       } else {
         this.show = true;
         if (this.buy_count == 0) {

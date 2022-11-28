@@ -121,8 +121,6 @@ export default {
   },
   mounted() {
     this.getList();
-    
-    console.log("%cindex.vue line:95 1", "color: #007acc;", 1);
   },
   computed: {
     ...mapState(["userinfo"]),
