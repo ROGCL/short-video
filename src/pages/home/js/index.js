@@ -223,6 +223,13 @@ export default {
                 id:2,
                 text:'VIP加速'
             }],
+            noneVipTips:[{
+                id:1,
+                text:'取消任务'
+            },{
+                id:2,
+                text:'VIP加速'
+            }],
             promptList: promptList,
         }
     }

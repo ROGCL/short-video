@@ -25,11 +25,11 @@
     <div class="container">
       <!-- 关键词 -->
       <div class="title-public">
-        <img src="@/assets/img/index-img/19.png" alt="" class="image-public" />
+        <img src="@/assets/img/index-img/19.png" alt="" class="image-public keywordsImage" />
       </div>
       <!-- 输入框 -->
       <div class="textarea">
-        <textarea id="textarea" cols="30" rows="10" placeholder="输入关于画面的关键词，用逗号隔开" v-model="promptValue"></textarea>
+        <textarea id="textarea" cols="30" rows="7" placeholder="输入关于画面的关键词，用逗号隔开" v-model="promptValue"></textarea>
       </div>
       <!-- 条件选择框 -->
       <div class="select">
@@ -197,7 +197,7 @@
               <!-- 制作次数 -->
               <h3>{{ item.title }}</h3>
               <h4>￥<span>{{ item.price }}</span></h4>
-              <!-- 描述文字 -->
+              <!-- 描述文字--尚未解决颜色图层问题rgba(0,0,0,.5) -->
               <h5>{{ item.hint1 }}</h5>
             </div>
           </div>
@@ -252,12 +252,27 @@
        <div class="none-vip">
         <div class="none-vip-inner">
           <h5>提交成功</h5>
-        <h6>当前预计排队45674人，请耐心等待！</h6>
+        <h6 id="success">当前预计排队3028846人，请耐心等待！</h6>
         </div>
         <div class="none-vip-bottom-btn">
           <div class="inner-btn-box" v-for="item in noneVip" :key="item.id" :class="{btnInnerAvtive:btnInnerAvtive == item.id}" @click="choosePath(item)">{{item.text}}</div>
         </div>
        </div>
+      </van-popup>
+
+     <!-- 没有vip，同时已有一个任务正在排队弹窗 -->
+      <van-popup v-model="noneVipShowTips" round :close-on-click-overlay="false">
+        <div class="popup-noneVip">
+          <div class="pop-title-noneVip">
+            已有一个任务正在排队
+          </div>
+          <h6 id="group">当前预计排队248078人</h6>
+          <div class="ajc-noneVip">
+            <div class="my-know" v-for="item in noneVipTips" :key="item.id" :class="{vipActiveMore:vipActiveMore==item.id}" @click="selectChoose(item)"> 
+              {{item.text}}
+            </div>
+          </div>
+        </div>
       </van-popup>
     </div>
   </div>
@@ -293,7 +308,7 @@ export default {
       styleIndex: -1, // 风格选择
       ratioIndex: -1,  // 比例选择
       init_image: "",  // 参考图
-      promptIndex: -1, // 关键词默认选择第一个
+      promptIndex: 0, // 关键词默认选择第一个
       promptValue: '',  // 关键词的value
       promptActiveList: [], // 当前引擎选择的关键词
       // userinfo: {}, // 用户信息
@@ -307,7 +322,12 @@ export default {
       init_image_ratio: '', // 图片比例
       ratioAuto: false, // 是否自动选中比例
       buy_count:"", //是否是vip（是否有购买次数）字段
-      worksPointShow:false  //任务提交成功后，作品栏的小圆点
+      worksPointShow:false,  //任务提交成功后，作品栏的小圆点
+      noneVipShowTips:false,   //普通用户多次提交，弹窗字段
+      vipActiveMore:2, //非vip连续点击提交的提醒高亮字段
+      popuppricechooseDescribe:0, //购买弹窗描述文字的颜色的索引
+      time:30, //时间倒计时秒数,用于非vip用户在未到时间内再次提交使用,
+      lineUp:248078 //排队人数,做递减
     };
   },
 
@@ -315,9 +335,9 @@ export default {
     // 设置不同引擎的关键词
     tabActiveIndex: {
       handler: function (index) {
-        this.initForm()
+        
         this.promptActiveList = this.promptList[this.tabs[index].value]
-
+        this.initForm()
       }, immediate: true,
       deep: true
     },
@@ -385,6 +405,7 @@ export default {
         this.showHeight = document.body.clientHeight;
       })()
     }
+    this.countDown()  //非vip用户在此倒计时内在提交弹窗
   },
   methods: {
     ...mapMutations(['setUserInfo', 'setreDrawInfo']),
@@ -395,8 +416,8 @@ export default {
 
     // 重置表单
     initForm() {
-      this.promptIndex = -1
-      this.promptValue = ''
+      this.promptIndex = 0
+      this.promptValue = this.promptActiveList[this.promptIndex].content
       // 漫画没有艺术家和风格
       this.artistIndex = -1
       this.styleIndex = -1
@@ -406,6 +427,7 @@ export default {
       this.ratioIndex = -1
       this.init_image = ''
       this.guideValue = 75
+      this.drawActiveId = 0
     },
     onPageResume() {
       this.getUserinfo()
@@ -580,23 +602,28 @@ export default {
       if(this.drawActiveId == 0){
         return sendMessage('openToast','请选择通道')
       }
+
       //这里是不走请求的
        //这里的判断为当用户购买次数为0时，同时选择的时vip通道(直接拉起支付)
       if (this.userinfo.buy_count == 0 && this.drawActiveId == 2) {
         return this.show = true
         //当次数为0，且选择普通通道时(假执行一次，且直接返回出去不执行接口逻辑，存储提交的数据)
       }else if(this.userinfo.buy_count == 0 && this.drawActiveId == 1){
-        sessionStorage.setItem('userinfo',JSON.stringify(params))
-        setTimeout(()=>{
-          
+        sessionStorage.setItem('SubmitMessage',JSON.stringify(params))
+        if(sessionStorage.getItem('SubmitMessage',JSON.stringify(params))){
+          this.noneVipShowTips = true
+        } else{
+          setTimeout(()=>{
           this.shadow = true
           this.noneVipShow = true
           this.worksPointShow = true
           this.initForm()  //提交成功之后清空数据
           return
         },2000)
-          }
-          
+        } 
+
+        }     
+
       this.shadow = true
       this.loading = true
       
@@ -633,8 +660,8 @@ export default {
     // 关键词切换
     promptChange(index) {
       if (this.promptIndex == index) {
-        this.promptValue = ''
-        this.promptIndex = -1
+        this.promptIndex = 0
+        this.promptValue = this.promptActiveList[this.promptIndex].content
       } else {
         this.promptValue = this.promptActiveList[index].content
         this.promptIndex = index;
@@ -686,9 +713,45 @@ export default {
         this.noneVipShow = false
       }else{
         this.noneVipShow = false
-
-        // this.$router.push('/works')
+        this.$router.push('/works')
       }
+    },
+    //非vip连续提交的判断
+    selectChoose(item){
+      if(item.id == 1){
+        this.noneVipShowTips = false
+      }else{
+        this.show = true
+        if(this.buy_count == 0){
+          this.noneVipShowTips = true
+        }else{
+          item[2].text = '点击加速'
+        }
+      }
+    },
+    countDown(){
+    //   let group = document.getElementById('group')
+    //   let time = 248078
+    //   let countDown = setInterval(()=>{
+    //     group.innerHTML = `当前预计排队${time}人`
+    //     time--
+        
+    //     if(time==20000){
+    //       clearInterval(countDown)
+    //     }
+    //     // console.log(time)
+    //   },2000)
+    //  let success = document.getElementById('success')
+    //  let finnal = 3028846
+    //   let countDownTime = setInterval(()=>{
+    //     success.innerHTML = `当前预计排队${finnal}人，请耐心等待！`
+    //     finnal--
+        
+    //     if(time==20000){
+    //       clearInterval(countDownTime)
+    //     }
+    //     // console.log(time)
+    //   },2000)
     }
   },
 };
@@ -718,14 +781,16 @@ export default {
   width: 2.6667rem;
   height: 100%;
 }
-
+.keywordsImage{
+  width: 2.24rem;
+}
 .cutting {
   /* position: sticky; */
   top: 0;
   width: 9.68rem;
   height: 1.1733rem;
   margin-left: 0.16rem;
-
+border-bottom: 2px solid rgba(255,255,255,0.12) ;
   /* margin-top: -1.04rem; */
   /* background-image: url("@/assets/img/index-img/5.png"); */
   background-repeat: no-repeat;
@@ -794,7 +859,7 @@ export default {
 
 #textarea {
   width: 9.1467rem;
-  height: 1.8933rem;
+  /* height: 1.8933rem; */
   /* margin-top: 0.2667rem; */
   resize: none;
   border: none;
@@ -834,12 +899,12 @@ export default {
 .select-content {
   display: inline-block;
   /* width: 1.8133rem; */
-  padding: 0 .2667rem;
+  padding: .16rem .4267rem;
   margin-right: 0.2133rem;
   /* background: #31373e; */
   background: rgba(49, 55, 62, 0.5);
   border-radius: 0.16rem;
-  line-height: 0.6667rem;
+  /* line-height: 0.6667rem; */
   text-align: center;
   font-size: 0.32rem;
   color: #c5c8d4;
@@ -862,7 +927,7 @@ export default {
   display: inline-block;
   width: 2.16rem;
   /* height: 3.4933rem; */
-  margin-right: 0.32rem;
+  margin-right: .3733rem;
   text-align: center;
   flex-shrink: 0;
   /** 防止父元素使用了flex子元素宽度被挤压 */
@@ -882,7 +947,7 @@ export default {
 .gaofan {
   width: 100%;
   height: 100%;
-  border-radius: .08rem;
+  border-radius: .0533rem;
   /* padding: .1067rem; */
 }
 
@@ -892,7 +957,7 @@ export default {
   padding: 0.1067rem;
   /* border: 0.0267rem solid rgba(51, 225, 215, 1); */
   border: 0.0267rem solid #66C3FF;
-  border-radius: 0.16rem;
+  border-radius: .1067rem;
   box-sizing: border-box;
 }
 
@@ -930,7 +995,7 @@ export default {
   display: inline-block;
   width: 1.44rem;
   /* height: 1.44rem; */
-  margin-right: 0.2667rem;
+  margin-right: .3467rem;
   flex-shrink: 0;
   text-align: center;
   align-self: baseline;
@@ -945,7 +1010,7 @@ export default {
 .pain-img {
   width: 100%;
   height: 100%;
-  border-radius: .08rem;
+  border-radius: .0533rem;
 }
 
 .fullimg {
@@ -956,7 +1021,7 @@ export default {
 .activeimg {
   padding: 0.1067rem;
   border: 0.0267rem solid #66C3FF;
-  border-radius: .16rem;
+  border-radius: .08rem;
   box-sizing: border-box;
 }
 
@@ -975,7 +1040,7 @@ export default {
 .img27 {
   width: .8533rem;
   height: .8533rem;
-  border: 1px dashed #7D808D;
+  /* border: 1px dashed #7D808D; */
 }
 
 .upload-text {
@@ -1078,7 +1143,7 @@ export default {
   width: 1.4933rem;
   height: .7733rem;
   background: rgba(49, 55, 62, 0.5);
-  border-radius: 0.16rem;
+  border-radius:.08rem;
   line-height: 0.7733rem;
   font-size: 0.32rem;
   color: #7d808d;
@@ -1097,6 +1162,7 @@ export default {
   top: 1.9733rem;
   left: .5333rem;
   width: 8.08rem;
+  height: .7733rem;
 }
 
 .slider-bottom-small-footer-box {
@@ -1243,7 +1309,7 @@ color: #66C3FF;
 
 .borderpubs {
   border: 0.0267rem solid #66C3FF;
-  border-radius: .2133rem;
+  border-radius: .08rem;
   /* color: #66C3FF */
     /* border-image: linear-gradient(135deg,
       rgba(80, 108, 255, 1),
@@ -1376,6 +1442,7 @@ color: #66C3FF;
   position: relative;
   width: 2.9067rem;
   height: 3.4933rem;
+  margin-right: -0.04rem;
   margin-top: -1.8933rem;
   background: #31373E;
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -1401,6 +1468,7 @@ color: #66C3FF;
 }
 
 .popup-price h4 span {
+  font-weight: 600;
   font-size: .6933rem;
 }
 
@@ -1415,8 +1483,8 @@ color: #66C3FF;
 /* 第一幅图的推荐购 */
 .tuijian {
   position: absolute;
-  left: 0;
-  top: 0;
+  left: -0.0267rem;
+  top: -0.0133rem;
   width: 1.4933rem;
   height: .64rem;
   background: #FF5353;
@@ -1434,7 +1502,9 @@ color: #66C3FF;
   background: linear-gradient(135deg, #A4B2FF 0%, #A9DDFF 51%, #99FFF9 100%);
   color: #000 !important;
 }
-
+/* .popuppricechooseDescribe{
+  color: rgba(0,0,0,0.5) !important;
+} */
 .buy {
   margin-top: .5333rem;
   height: 1.28rem;
@@ -1658,6 +1728,50 @@ color: #66C3FF;
   border-radius: .2133rem;
 }
 .btnInnerAvtive{
+  color: #fff;
+  background: linear-gradient(160deg, #FFA985 0%, #FF4370 100%);
+}
+.popup-noneVip{
+  width: 6.6933rem;
+  height: 4.96rem;
+  border-radius: .2133rem;
+  background-image: url(@/assets/img/5.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.pop-title-noneVip{
+  font-size: .5333rem;
+  color: #000000;
+  font-weight: bold;
+  padding-top: .7467rem;
+  text-align: center;
+}
+.popup-noneVip h6{
+  font-size: .3733rem;
+  color: #7D808D;
+  font-weight: normal;
+  text-align: center;
+  margin-top: .16rem;
+  margin-bottom: 1.2267rem;
+}
+.ajc-noneVip{
+  display: flex;
+  justify-content: space-between;
+  width: 5.28rem;
+  height: 1.0667rem;
+  margin: 0 auto;
+}
+.my-know{
+  width: 2.4267rem;
+  height: 1.0667rem;
+  border-radius: .2133rem;
+  background: rgba(49,55,62,0.1);
+  font-size: .3733rem;
+  text-align: center;
+  line-height: 1.0667rem;
+  font-weight: 600;
+}
+.vipActiveMore{
   color: #fff;
   background: linear-gradient(160deg, #FFA985 0%, #FF4370 100%);
 }

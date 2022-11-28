@@ -359,8 +359,8 @@ export default {
 }
 
 .no-data-img {
-  width: 96rpx;
-  height: 96rpx;
+  width: 1.28rem;
+  height: 1.28rem;
   margin-bottom: 0.16rem;
 }
 

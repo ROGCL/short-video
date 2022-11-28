@@ -198,102 +198,144 @@
             "image": ""
         }
     ],
-    "stable_diffusion": [{
-            "text": "蓝色人种",
-            "value": "Portrait of a blue skin genasi with a square jaw from d & d by greg rutkowski, dreadlocks and small beard, tempest priest, runic rings, d & d character, blue, black background, highly detailed portrait, digital painting, artstation, concept art, smooth, sharp foccus ilustration, artstation hq",
-            "content": "格雷格·鲁特科夫斯基（greg rutkowski）的d&d作品《蓝色皮肤、方下巴的杰纳西肖像》，长发辫和小胡子，暴风雨牧师，符文戒指，d&d人物，蓝色，黑色背景，高度详细的肖像，数字绘画，艺术站，概念艺术，平滑、尖锐的焦点描绘，艺术站hq",
-            "image": ""
-        },
-        {
-            "text": "小兔子",
-            "value": "Portrait of a super cute bunny, a carrot, pixar, zootopia, cgi, blade runner. trending on artstation",
-            "content": "一只超级可爱的兔子的肖像，一只胡萝卜，皮克斯，动物主题，cgi，刀锋杀手。艺术站趋势",
-            "image": ""
-        },
-        {
-            "text": "星际狐狸",
-            "value": "Underwater steampunk biopunk portrait of fox mccloud from star fox ( 1 9 9 3 ), hyper detailed, digital art, trending in artstation, cinematic lighting, studio quality, smooth render, unreal engine 5 rendered, octane rendered, art style by klimt and nixeu and ian sprigger and wlop and krenz cushart.",
-            "content": "《星际福克斯》（1 9 9 3）中福克斯·麦克劳德的水下蒸汽朋克传记肖像画，超详细的数字艺术，艺术站的趋势，电影灯光，画室质量，平滑渲染，虚幻引擎5渲染，辛烷渲染，艺术风格由克林特和尼塞乌、伊恩·斯普里格、乌洛普和克伦兹·库斯哈特创作。",
-            "image": ""
-        },
-        {
-            "text": "大教堂",
-            "value": "arch, architecture, book_stack, bookshelf, building, candle, chandelier, city, city_lights, cityscape, copyright_name, fire, indoors, library, lantern, skyscraper, standing, sunset, clock, gears, butterfly, window, cinematic, epic composition, no_humans, scenery, detailed, atmospheric, artstation trending",
-            "content": "拱门，建筑，书架，建筑，蜡烛，吊灯，城市，城市_灯光，城市景观，版权名称，火，室内，图书馆，灯笼，摩天大楼，站立，日落，时钟，齿轮，蝴蝶，窗户，电影，史诗般的构图，非人，风景，细节，大气，艺术站趋势",
-            "image": ""
-        },
-        {
-            "text": "海底世界",
-            "value": "A beautiful matte digital painting of a light-green sea turtle swimming over an red-orange coral reef through blue-violet waters, triadic color palette, painted in the style of national geographic, trending on artstation hq",
-            "content": "一幅美丽的哑光数字画，描绘了一只浅绿色海龟在红橙色珊瑚礁上游泳，穿过蓝紫色水域，三色调色板，以国家地理的风格绘制，在艺术台hq上流行",
-            "image": ""
-        },
-        {
-            "text": "故乡的原野",
-            "value": "Anime screenshot wide-shot landscape with house in the apple garden, beautiful ambiance, golden hour, studio ghibli style, by hayao miyazaki, highly detailed",
-            "content": "动画截图苹果园中的房子，美丽的环境，金色的时刻，工作室ghibli风格，由宫崎浩拍摄，非常详细",
-            "image": ""
-        }
+    "stable_diffusion": [ {
+        "text":"小兔子",
+        "value":"Portrait of a super cute bunny, a carrot, pixar, zootopia, cgi, blade runner. trending on artstation",
+        "content":"一只超级可爱的兔子的肖像，一只胡萝卜，皮克斯，动物主题，cgi，刀锋杀手。艺术站趋势",
+        "image":""
+    },
+    {
+        "text":"星际狐狸",
+        "value":"Underwater steampunk biopunk portrait of fox mccloud from star fox ( 1 9 9 3 ), hyper detailed, digital art, trending in artstation, cinematic lighting, studio quality, smooth render, unreal engine 5 rendered, octane rendered, art style by klimt and nixeu and ian sprigger and wlop and krenz cushart.",
+        "content":"《星际福克斯》（1 9 9 3）中福克斯·麦克劳德的水下蒸汽朋克传记肖像画，超详细的数字艺术，艺术站的趋势，电影灯光，画室质量，平滑渲染，虚幻引擎5渲染，辛烷渲染，艺术风格由克林特和尼塞乌、伊恩·斯普里格、乌洛普和克伦兹·库斯哈特创作。",
+        "image":""
+    },
+    {
+        "text":"大教堂",
+        "value":"arch, architecture, book_stack, bookshelf, building, candle, chandelier, city, city_lights, cityscape, copyright_name, fire, indoors, library, lantern, skyscraper, standing, sunset, clock, gears, butterfly, window, cinematic, epic composition, no_humans, scenery, detailed, atmospheric, artstation trending",
+        "content":"拱门，建筑，书架，建筑，蜡烛，吊灯，城市，城市_灯光，城市景观，版权名称，火，室内，图书馆，灯笼，摩天大楼，站立，日落，时钟，齿轮，蝴蝶，窗户，电影，史诗般的构图，非人，风景，细节，大气，艺术站趋势",
+        "image":""
+    },
+    {
+        "text":"海底世界",
+        "value":"A beautiful matte digital painting of a light-green sea turtle swimming over an red-orange coral reef through blue-violet waters, triadic color palette, painted in the style of national geographic, trending on artstation hq",
+        "content":"一幅美丽的哑光数字画，描绘了一只浅绿色海龟在红橙色珊瑚礁上游泳，穿过蓝紫色水域，三色调色板，以国家地理的风格绘制，在艺术台hq上流行",
+        "image":""
+    },
+    {
+        "text":"故乡的原野",
+        "value":"Anime screenshot wide-shot landscape with house in the apple garden, beautiful ambiance, golden hour, studio ghibli style, by hayao miyazaki, highly detailed",
+        "content":"动画截图苹果园中的房子，美丽的环境，金色的时刻，工作室ghibli风格，由宫崎浩拍摄，非常详细",
+        "image":""
+    }
     ],
-    "acgn_diffusion": [{
-            "text": "花丛中的少女",
-            "value": "A beautiful ultradetailed panorama of a girl walking through a field of colorful flowers by beeple, studio ghibli, makoto shinkai, wallpaper, highly detailed, trending on artstation anime",
-            "content": "通过哔哔声、吉卜力工作室、真田真开、壁纸、高度详细的艺术站动画趋势，一个女孩走过一片色彩斑斓的花朵的美丽超详细全景",
-            "image": ""
-        },
-        {
-            "text": "花鸟山水",
-            "value": "A real photographic painting with incomparable reality, wonderland, clouds, flowers all over the mountains and plains, smokes, Chinese traditional landscape painting, super wide scenery, unreal engine , Super realistic painting style, artstation.",
-            "content": "一幅真实的摄影作品，具有无与伦比的真实感，仙境，云彩，漫山遍野的花朵，烟雾，中国传统山水画，超宽的风景，虚幻的引擎，超写实的绘画风格，艺术站。",
-            "image": ""
-        },
-        {
-            "text": "美丽古堡",
-            "value": "A film in IMAX of beautiful ancient castles overlooking verdant cliffs, 8k resolution, super detailed, sunset glow, reflection, mirror, dreamlike, by John Atkinson Grimshaw and Rob Gonsalves.",
-            "content": "由约翰·阿特金森·格里姆肖（John Atkinson Grimshaw）和罗伯·贡萨尔维斯（Rob Gonsalves）拍摄的IMAX电影，讲述了俯瞰青翠悬崖的美丽古堡、8k分辨率、超精细、晚霞、倒影、镜子、梦幻般的画面。",
-            "image": ""
-        },
-        {
-            "text": "五彩树叶",
-            "value": "a beautiful ultradetailed anime colorful digital illustration of leaf design pattern recursion, pixar style, beautiful matte painting, high detail, heavenly glow, octane render, 4k hd wallpaper, by makoto shinka and thomas kinkade, anime art , trending on artstation:5\", \"anime car:-1\", \"dof:-1\", \"building:-1\", \"blur:-1\", \"globe:-1",
-            "content": "一个美丽的超详细的动漫树叶设计图案递归的彩色数字插图，像素风格，美丽的哑光绘画，高细节，天光，辛烷值渲染，4k高清壁纸，由makoto shinka和thomas kinkade，动漫艺术，艺术站趋势：5”，“动漫汽车：-1”，“自由度：-1””，“建筑：-1”",
-            "image": ""
-        },
-        {
-            "text": "樱花树",
-            "value": "A ultra-realistic CG rendering of Sakura Tree at Midnight, realistic sea with pretty islands and sunset, serene landscape, by Ivan Aivazovsky , in volumetric lighting, Trending on artstation",
-            "content": "\"伊凡·艾瓦佐夫斯基（Ivan Aivazovsky）的《午夜樱花树》（Sakura Tree at Midnight）的超现实CG渲染图，具有美丽岛屿和日落的现实大海，宁静的风景，采用立体照明，艺术站上的趋势",
-            "image": ""
-        },
-        {
-            "text": "壮丽的树",
-            "value": "Magnificent tree, seen from a distance, science fiction, Holy terror, mystery, fantasy, sense of technology, unreal engine, metallic texture, Volume light, Look up, colorful, Super wide angle, magnificent, great spectacle, by Raphael Lacoste",
-            "content": "宏伟的树，从远处看，科幻小说，神圣的恐怖，神秘，幻想，科技感，不真实的引擎，金属质感，卷光，仰望，多彩，超广角，壮丽，伟大的奇观，拉斐尔·拉科斯特",
-            "image": ""
-        },
-        {
-            "text": "寺庙&云彩",
-            "value": "Overlooking brilliant temples, journey to the west, lakes, clouds and sun, fairy tales, light effects, fantasy, SAMUEL BEAL, abhimanyu bhadauria, artstation, colorful",
-            "content": "俯瞰辉煌的寺庙，西游记，湖泊，云和太阳，童话，灯光效果，幻想，SAMUEL BEAL，abhimanyu bhadauria，艺术站，多彩",
-            "image": ""
-        },
-        {
-            "text": "中国城堡&桃花树",
-            "value": "A beautiful painting of Chinese fairyland full of peach blossom trees and Chinese castles, cloudy and foggy by Makoto Shinkai",
-            "content": "一幅美丽的中国仙境画，充满了桃花树和中国城堡，多云多雾",
-            "image": ""
-        },
-        {
-            "text": "蓝色海洋",
-            "value": "A beautiful detailed landscape matte painting of blue ocean, by Caspar David Friedrich, Trending on artstation",
-            "content": "卡斯帕·戴维·弗里德里希（Caspar David Friedrich）创作的一幅蓝色海洋的精美细节景观哑光画",
-            "image": ""
-        },
-        {
-            "text": "亚特兰蒂斯 ",
-            "value": "Atlantis under the Sea, Trending on artstation",
-            "content": "海底亚特兰蒂斯，艺术站上的潮流",
-            "image": ""
-        }
+    "acgn_diffusion": [ {
+        "text":"二次元",
+        "value":"High quality, masterpiece, master's work, exquisite facial features, exquisite hair, exquisite eyes, exquisite colorful hair, outstanding facial features, gem eyes, small nose, beauty, goddess, scattered snow, roads, cars, buildings, houses, pedestrians, dizziness, railings, exquisite clothing, scarves",
+        "content":"高品质，杰作，大师之作，精致的五官刻画，精致的头发刻画，精致的眼睛刻画，精致的彩色头发，出色的五官，宝石眼，小巧的鼻子，美女，女神，飘散的雪花，马路，车，建筑，房子，行人， 晕，栏杆，精致的服饰，围巾",
+        "image":""
+    },
+    {
+        "text":"唯美动漫",
+        "value":"High quality, masterpiece, master's work, delicate facial features, delicate hair, delicate eyes, angels, white wings, gorgeous skirts, green grass, light and shadow, a book, a long curly hair, Tindal effect, slender hands, goddess, peerless beauty",
+        "content":"高品质，杰作，大师之作，精致的五官刻画，精致的头发刻画，精致的眼睛刻画，天使，白色的翅膀，华丽的裙子，绿色的草地，光影，一本书，一头长卷发，丁达尔效应，纤细的手，女神，绝世美女",
+        "image":""
+    },
+    {
+        "text":"现代国风",
+        "value":"High quality, masterpiece, masterpiece, 4K picture quality, delicate facial features, delicate hair, delicate eyes, national style, cheongsam, lace, cheongsam, Chinese style, texture",
+        "content":"高品质，杰作，大师之作，4K画质，精致的五官刻画，精致的头发刻画，精致的眼睛刻画，国风，旗袍，蕾丝花边，旗袍，中式，质感",
+        "image":""
+    },
+    {
+        "text":"民族特色",
+        "value":"Anime, light and shadow, details, exquisite lighting, correct proportion, perfect composition, masterpiece, master's work, high-quality and rich details, high resolution, ultra-high picture quality, exquisite facial depiction, Dingdal effect, light, sacred girl",
+        "content":"二次元，光影，细节，打光精致，比例正确，完美构图，杰作，大师之作，高质量丰富细节，高分辨，超高画质，精致的五官刻画，丁达尔效应，光线，神圣的少女",
+        "image":""
+    },
+    {
+        "text":"写实男生",
+        "value":"High quality, masterpiece, masterpiece, delicate facial features, delicate hair, delicate eyes, angular faces, red phoenix eyes, cool drag, car photos, sitting on a chair with blue and white roses in hand, tall nose, male spirit, black shirt, ring finger, handsome boy",
+        "content":"高品质，杰作，大师之作，精致的五官刻画，精致的头发刻画，精致的眼睛刻画，棱角分明的脸庞，丹凤眼，酷拽，车内拍照，坐在椅子上，手捧蓝白色玫瑰，高挺的鼻子，男神，黑色衬衫，戒指，帅哥",
+        "image":""
+    },
+    {
+        "text":"生活化",
+        "value":"High quality, masterpiece, masterpiece, delicate facial features, delicate hair, delicate eyes, delicate colorful hair, blue hair hoop, two bookshelves, many books, gem eyes, goddesses, beautiful girls, dreams, delicate faces, beautiful women, light and shadow, and aestheticism",
+        "content":"高品质，杰作，大师之作，精致的五官刻画，精致的头发刻画，精致的眼睛刻画，精致的彩色头发，蓝色的发箍，两个书架，很多摆好的书，宝石眼，女神，美少女，梦幻，精致的脸庞，美女，光影，唯美",
+        "image":""
+    },
+    {
+        "text":"古风唯美",
+        "value":"Anime, light and shadow, details, exquisite lighting, correct proportion, perfect composition, masterpieces, masterpieces, high-quality and rich details, high resolution, ultra-high picture quality, exquisite facial features, 4k picture quality, animation, flowers, goddess, hostess",
+        "content":"二次元，光影，细节，打光精致，比例正确，完美构图，杰作，大师之作，高质量丰富细节，高分辨，超高画质，精致的五官刻画，4k画质，动漫，花朵，女神，女主",
+        "image":""
+    },
+    {
+        "text":"国风质感",
+        "value":"Anime, light and shadow, detail, polish delicate, correct proportion, perfect composition, masterpiece, masterpiece, high-quality rich details, high-resolution, ultra-high quality, exquisite facial features, 4k quality, animation, sweet, princess anime, light and shadow, detail, polish delicate, correct proportion, perfect composition, masterpiece, master's work, high-quality rich details, high-resolution, ultra-high quality, exquisite facial features, 4k quality, Animation, sweet, princess",
+        "content":"二次元，光影，细节，打光精致，比例正确，完美构图，杰作，大师之作，高质量丰富细节，高分辨，超高画质，精致的五官刻画，4k画质，动漫，甜美，公主二次元，光影，细节，打光精致，比例正确，完美构图，杰作，大师之作，高质量丰富细节，高分辨，超高画质，精致的五官刻画，4k画质，动漫，甜美，公主",
+        "image":""
+    },
+    {
+        "text":"花丛中的少女",
+        "value":"A beautiful ultradetailed panorama of a girl walking through a field of colorful flowers by beeple, studio ghibli, makoto shinkai, wallpaper, highly detailed, trending on artstation anime",
+        "content":"通过哔哔声、吉卜力工作室、真田真开、壁纸、高度详细的艺术站动画趋势，一个女孩走过一片色彩斑斓的花朵的美丽超详细全景",
+        "image":""
+    },
+    {
+        "text":"花鸟山水",
+        "value":"A real photographic painting with incomparable reality, wonderland, clouds, flowers all over the mountains and plains, smokes, Chinese traditional landscape painting, super wide scenery, unreal engine , Super realistic painting style, artstation.",
+        "content":"一幅真实的摄影作品，具有无与伦比的真实感，仙境，云彩，漫山遍野的花朵，烟雾，中国传统山水画，超宽的风景，虚幻的引擎，超写实的绘画风格，艺术站。",
+        "image":""
+    },
+    {
+        "text":"美丽古堡",
+        "value":"A film in IMAX of beautiful ancient castles overlooking verdant cliffs, 8k resolution, super detailed, sunset glow, reflection, mirror, dreamlike, by John Atkinson Grimshaw and Rob Gonsalves.",
+        "content":"由约翰·阿特金森·格里姆肖（John Atkinson Grimshaw）和罗伯·贡萨尔维斯（Rob Gonsalves）拍摄的IMAX电影，讲述了俯瞰青翠悬崖的美丽古堡、8k分辨率、超精细、晚霞、倒影、镜子、梦幻般的画面。",
+        "image":""
+    },
+    {
+        "text":"五彩树叶",
+        "value":"a beautiful ultradetailed anime colorful digital illustration of leaf design pattern recursion, pixar style, beautiful matte painting, high detail, heavenly glow, octane render, 4k hd wallpaper, by makoto shinka and thomas kinkade, anime art , trending on artstation:5\", \"anime car:-1\", \"dof:-1\", \"building:-1\", \"blur:-1\", \"globe:-1",
+        "content":"一个美丽的超详细的动漫树叶设计图案递归的彩色数字插图，像素风格，美丽的哑光绘画，高细节，天光，辛烷值渲染，4k高清壁纸，由makoto shinka和thomas kinkade，动漫艺术，艺术站趋势：5”，“动漫汽车：-1”，“自由度：-1””，“建筑：-1”",
+        "image":""
+    },
+    {
+        "text":"樱花树",
+        "value":"A ultra-realistic CG rendering of Sakura Tree at Midnight, realistic sea with pretty islands and sunset, serene landscape, by Ivan Aivazovsky , in volumetric lighting, Trending on artstation",
+        "content":"\"伊凡·艾瓦佐夫斯基（Ivan Aivazovsky）的《午夜樱花树》（Sakura Tree at Midnight）的超现实CG渲染图，具有美丽岛屿和日落的现实大海，宁静的风景，采用立体照明，艺术站上的趋势",
+        "image":""
+    },
+    {
+        "text":"壮丽的树",
+        "value":"Magnificent tree, seen from a distance, science fiction, Holy terror, mystery, fantasy, sense of technology, unreal engine, metallic texture, Volume light, Look up, colorful, Super wide angle, magnificent, great spectacle, by Raphael Lacoste",
+        "content":"宏伟的树，从远处看，科幻小说，神圣的恐怖，神秘，幻想，科技感，不真实的引擎，金属质感，卷光，仰望，多彩，超广角，壮丽，伟大的奇观，拉斐尔·拉科斯特",
+        "image":""
+    },
+    {
+        "text":"寺庙&云彩",
+        "value":"Overlooking brilliant temples, journey to the west, lakes, clouds and sun, fairy tales, light effects, fantasy, SAMUEL BEAL, abhimanyu bhadauria, artstation, colorful",
+        "content":"俯瞰辉煌的寺庙，西游记，湖泊，云和太阳，童话，灯光效果，幻想，SAMUEL BEAL，abhimanyu bhadauria，艺术站，多彩",
+        "image":""
+    },
+    {
+        "text":"中国城堡&桃花树",
+        "value":"A beautiful painting of Chinese fairyland full of peach blossom trees and Chinese castles, cloudy and foggy by Makoto Shinkai",
+        "content":"一幅美丽的中国仙境画，充满了桃花树和中国城堡，多云多雾",
+        "image":""
+    },
+    {
+        "text":"蓝色海洋",
+        "value":"A beautiful detailed landscape matte painting of blue ocean, by Caspar David Friedrich, Trending on artstation",
+        "content":"卡斯帕·戴维·弗里德里希（Caspar David Friedrich）创作的一幅蓝色海洋的精美细节景观哑光画",
+        "image":""
+    },
+    {
+        "text":"亚特兰蒂斯 ",
+        "value":"Atlantis under the Sea, Trending on artstation",
+        "content":"海底亚特兰蒂斯，艺术站上的潮流",
+        "image":""
+    }
     ]
 }
