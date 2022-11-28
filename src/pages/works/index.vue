@@ -184,11 +184,10 @@ export default {
         uuid: this.userinfo.uuid,
         platform: device.system,
       });
-      this.getList();
-      this.page = 1;
       console.log(res, "取消");
       if (err) return;
-
+      this.page = 1;
+      this.getList();
     },
     freshPage() {
       this.reFresh();
