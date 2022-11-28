@@ -42,7 +42,7 @@
           @load="loadmore"
           :immediate-check="false"
         >
-          <div class="content" v-if="list.length > 0">
+          <div class="content" v-if="list!==''">
             <div
               class="img-container"
               @click="go(item)"
@@ -184,10 +184,11 @@ export default {
         uuid: this.userinfo.uuid,
         platform: device.system,
       });
-      console.log(res, "取消");
-      if (err) return;
       this.getList();
       this.page = 1;
+      console.log(res, "取消");
+      if (err) return;
+
     },
     freshPage() {
       this.reFresh();
@@ -364,8 +365,8 @@ export default {
 }
 
 .no-data-img {
-  width: 96rpx;
-  height: 96rpx;
+  width: 1.28rem;
+  height: 1.28rem;
   margin-bottom: 0.16rem;
 }
 
