@@ -185,9 +185,10 @@ export default {
         uuid: this.userinfo.uuid,
         platform: device.system,
       });
-      if (err) return;
       this.page = 1;
       this.getList();
+      if (err) return;
+
     },
     turnCombos(){
       this.shadow = true
