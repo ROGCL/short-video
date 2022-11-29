@@ -396,29 +396,20 @@ export default {
     //当有次数之后,点击加速按钮发起请求
     turnSpeedUp() {
       let storage = JSON.parse(this.info);
-      let artist = storage.artist;
-      let style = storage.style;
-      let ratio = storage.ratio;
-      let engine = storage.engine;
-      let init_image = storage.init_image;
-      let is_last_layer_skip = storage.is_last_layer_skip;
-      let enable_face_enhance = storage.enable_face_enhance;
-      let guidence_scale = storage.guidence_scale;
-      let init_strength = storage.init_strength;
-      let styleText = storage.styleText;
+      // let artist = storage.artist;
+      // let style = storage.style;
+      // let ratio = storage.ratio;
+      // let engine = storage.engine;
+      // let init_image = storage.init_image;
+      // let is_last_layer_skip = storage.is_last_layer_skip;
+      // let enable_face_enhance = storage.enable_face_enhance;
+      // let guidence_scale = storage.guidence_scale;
+      // let init_strength = storage.init_strength;
+      // let styleText = storage.styleText;
       //发起请求
       this.$http
         .post("/api/v6.Aipainting/putTask", {
-          artist,
-          style,
-          ratio,
-          engine,
-          init_image,
-          is_last_layer_skip,
-          enable_face_enhance,
-          guidence_scale,
-          init_strength,
-          styleText,
+          ...storage,
           uuid: this.userinfo.uuid,
           platform: device.system,
         })

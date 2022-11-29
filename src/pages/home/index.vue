@@ -897,7 +897,11 @@ export default {
       let storage = JSON.parse(sessionStorage.getItem("SubmitMessage"));
       //发起请求
       this.$http
-        .post("/api/v6.Aipainting/putTask", { ...storage })
+        .post("/api/v6.Aipainting/putTask", {
+          ...storage,
+          uuid: this.userinfo.uuid,
+          platform: device.system,
+        })
         .then((res) => {
           //当不是返回的错误码时，再次发起获取结果的请求
           if (res.status == 1) {
