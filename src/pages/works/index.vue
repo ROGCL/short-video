@@ -35,16 +35,15 @@
       </div>
 
       <!-- 瀑布流 -->
-      <template v-if="list.length > 0">
-        <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+      <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
           <van-list
             v-model="loading"
             :finished="finished"
-            finished-text="没有更多了"
+            :finished-text="list.length > 0 ? '没有更多了' : ''"
             @load="loadmore"
             :immediate-check="false"
           >
-            <div class="content">
+            <div class="content" v-if="list!==''">
               <div
                 class="img-container"
                 @click="go(item)"
@@ -71,17 +70,14 @@
                 />
               </div>
             </div>
+  
+            <div class="no-data" v-else>
+              <img src="@/assets/img/2.png" class="no-data-img" alt="" />
+              <div class="text">还没有作品哦</div>
+              <div class="btn" @click="back">去制作</div>
+            </div>
           </van-list>
         </van-pull-refresh>
-      </template>
-
-      <template v-else>
-        <div class="no-data">
-          <img src="@/assets/img/2.png" class="no-data-img" alt="" />
-          <div class="text">还没有作品哦</div>
-          <div class="btn" @click="back">去制作</div>
-        </div>
-      </template>
     </div>
 
     <!-- 取消弹窗 -->
@@ -206,7 +202,7 @@ export default {
     window.onPaySuccess = this.onPaySuccess; // 支付成功
     // console.log(device.system,'设备')
     this.countDowm();
-    this.info = sessionStorage.getItem("SubmitMessage");
+    this.info = localStorage.getItem("SubmitMessage");
     console.log(this.userinfo.buy_count, "用户信息");
   },
   computed: {
@@ -217,6 +213,13 @@ export default {
     //安卓购买成功的回传
     onPageResume() {
       this.getUserinfo();
+      if (this.userinfo.buy_count != "0") {
+              this.lineUp = false;
+              this.shadow = false;
+              this.buySuccess = true;
+            } else {
+              this.lineUp = true;
+            }
       console.log(this.userinfo, "购买次数");
     },
 
@@ -230,13 +233,7 @@ export default {
           if (Object.keys(temp).length > 0) {
             this.setUserInfo(temp);
             console.log("获取用户数据成功ios", this.userinfo);
-            if (temp.buy_count != "0") {
-              this.lineUp = false;
-              this.shadow = false;
-              this.buySuccess = true;
-            } else {
-              this.lineUp = true;
-            }
+
           } else {
             sendMessage("jumpClientFunction", { linkType: 3000 });
           }
@@ -249,6 +246,13 @@ export default {
     // 原生app支付成功ios
     onPaySuccess(res) {
       this.getUserinfo();
+      if (this.userinfo.buy_count != "0") {
+              this.lineUp = false;
+              this.shadow = false;
+              this.buySuccess = true;
+            } else {
+              this.lineUp = true;
+            }
     },
     /**
      * 获取用户信息，如果没有用户信息表示没有登录；需要跳转登录
@@ -261,13 +265,13 @@ export default {
           this.setUserInfo(JSON.parse(userinfo));
           console.log("获取用户数据成功", this.userinfo);
 
-          if (userinfo.buy_count != '0') {
-            this.lineUp = false;
-            this.shadow = false;
-            this.buySuccess = true;
-          } else {
-            this.lineUp = true;
-          }
+          // if (userinfo.buy_count != '0') {
+          //   this.lineUp = false;
+          //   this.shadow = false;
+          //   this.buySuccess = true;
+          // } else {
+          //   this.lineUp = true;
+          // }
         } else {
           sendMessage("jumpClientFunction", { linkType: 3000 });
         }
@@ -287,9 +291,10 @@ export default {
     onRefresh() {
       // 清空列表数据
       this.finished = false;
+      this.refreshing = true
       this.page = 1;
       // this.list = []
-      this.taskConduct = 0;
+      // this.taskConduct = 0;
       // 重新加载数据
       this.getList();
     },
@@ -328,7 +333,7 @@ export default {
     async cancel() {
       if (this.info !== null || false) {
         this.show = false;
-        sessionStorage.removeItem("SubmitMessage");
+        localStorage.removeItem("SubmitMessage");
         console.log(this.info, "移出保存");
         this.info = null;
         return;
@@ -417,7 +422,7 @@ export default {
           //当不是返回的错误码时，再次发起获取结果的请求
           if (res.status == 1) {
             this.getList();
-            sessionStorage.removeItem("SubmitMessage");
+            localStorage.removeItem("SubmitMessage");
             this.buySuccess = false; //提交成功之后关闭加速弹窗
           }
           console.log(res, "是否提交成功");

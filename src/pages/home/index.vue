@@ -139,7 +139,27 @@
           <div class="reupload ajc" @click="uploadImg">重新上传</div>
         </div>
       </div>
-
+      <!-- 选择通道 -->
+      <div class="title-public">
+        <img src="@/assets/img/index-img/25.png" alt="" class="image-public" />
+      </div>
+      <div class="path-road">
+        <div
+          class="normal width-public"
+          v-for="item in drawChanels"
+          :key="item.id"
+          :class="{ borderpubs: drawActiveId === item.id }"
+          @click="drawChanelChoose(item)"
+        >
+          <img :src="item.img" alt="" />
+          <h5 class="h5-pub" v-if="item.id == 1" style="color: #fff">普通</h5>
+          <h5 class="h5-pub vipActive" v-else>VIP加速</h5>
+          <h6 class="h6-pub" v-if="item.id == 1">预计排队99999人</h6>
+          <h6 class="h6-pub" v-else>{{ item.h6 }}</h6>
+          <!-- 超快压层 -->
+          <div class="fast-pannel" v-show="item.id == 2"></div>
+        </div>
+      </div>
       <!-- 效果图比例 -->
       <div class="title-public">
         <img src="@/assets/img/index-img/23.png" alt="" class="image-public" />
@@ -224,27 +244,7 @@
           </div>
         </div>
       </div>
-      <!-- 选择通道 -->
-      <div class="title-public">
-        <img src="@/assets/img/index-img/25.png" alt="" class="image-public" />
-      </div>
-      <div class="path-road">
-        <div
-          class="normal width-public"
-          v-for="item in drawChanels"
-          :key="item.id"
-          :class="{ borderpubs: drawActiveId === item.id }"
-          @click="drawChanelChoose(item)"
-        >
-          <img :src="item.img" alt="" />
-          <h5 class="h5-pub" v-if="item.id == 1" style="color: #fff">普通</h5>
-          <h5 class="h5-pub vipActive" v-else>VIP加速</h5>
-          <h6 class="h6-pub" v-if="item.id == 1">预计排队99999人</h6>
-          <h6 class="h6-pub" v-else>{{ item.h6 }}</h6>
-          <!-- 超快压层 -->
-          <div class="fast-pannel" v-show="item.id == 2"></div>
-        </div>
-      </div>
+
       <!-- 开始绘画按钮 -->
       <!-- <router-link to="/making">
         <div class="begin-btn">开始绘画</div>
@@ -426,7 +426,7 @@ export default {
       hideshow: true, //显示或者隐藏footer
       device: device,
       artistIndex: -1, // 艺术家选择
-      drawActiveId: 0, // 选择绘画通道的方式
+      drawActiveId: 1, // 选择绘画通道的方式
       expandSetIndex: -1, // 智能拓展
       setupSetIndex: -1, // 步数设置
       guideValue: 75, // 引导力度
@@ -530,14 +530,14 @@ export default {
     this.getUserinfo();
     // 获取套餐信息
     this.getCombsInfo();
-
+    this.countDown(); //非vip用户在此倒计时内在提交弹窗
     // window.onresize监听页面高度的变化
     window.onresize = () => {
       return (() => {
         this.showHeight = document.body.clientHeight;
       })();
     };
-    this.countDown(); //非vip用户在此倒计时内在提交弹窗
+    
   },
   methods: {
     ...mapMutations(["setUserInfo", "setreDrawInfo"]),
@@ -559,10 +559,14 @@ export default {
       this.ratioIndex = -1;
       this.init_image = "";
       this.guideValue = 75;
-      this.drawActiveId = 0;
+      this.drawActiveId = 1;
     },
     onPageResume() {
       this.getUserinfo();
+      if (this.userinfo.buy_count != "0" && this.drawActiveId == 1) {
+            this.buyVip = false;
+            this.buySuccess = true;
+          }
     },
 
     // iOS 注入用户信息
@@ -573,10 +577,10 @@ export default {
         if (res && JSON.parse(res).userInfo) {
           let temp = JSON.parse(res).userInfo;
           if (Object.keys(temp).length > 0) {
-            if (temp.userinfo.buy_count != "0" && this.drawActiveId == 1) {
-              this.buyVip = false;
-              this.buySuccess = true;
-            }
+            // if (temp.userinfo.buy_count != "0" && this.drawActiveId == 1) {
+            //   this.buyVip = false;
+            //   this.buySuccess = true;
+            // }
             // this.userinfo = temp
             this.setUserInfo(temp);
             console.log("获取用户数据成功ios", this.userinfo);
@@ -592,6 +596,10 @@ export default {
     // 原生app支付成功
     onPaySuccess(res) {
       this.getUserinfo();
+        if (this.userinfo.buy_count != "0" && this.drawActiveId == 1) {
+            this.buyVip = false;
+            this.buySuccess = true;
+          }
     },
     /**
      * 获取用户信息，如果没有用户信息表示没有登录；需要跳转登录
@@ -602,11 +610,10 @@ export default {
         if (userinfo) {
           // this.userinfo = JSON.parse(userinfo)
           this.setUserInfo(JSON.parse(userinfo));
-          this.buy_count = this.userinfo.buy_count;
-          if (userinfo.buy_count != "0" && this.drawActiveId == 1) {
-            this.buyVip = false;
-            this.buySuccess = true;
-          }
+          // if (userinfo.buy_count != "0" && this.drawActiveId == 1) {
+          //   this.buyVip = false;
+          //   this.buySuccess = true;
+          // }
           console.log("获取用户数据成功", this.userinfo);
         } else {
           sendMessage("jumpClientFunction", { linkType: 3000 });
@@ -760,15 +767,15 @@ export default {
       //这里是不走请求的
       //这里的判断为当用户购买次数为0时，同时选择的时vip通道(直接拉起支付)
       if (this.userinfo.buy_count == 0 && this.drawActiveId == 2) {
-        return (this.show = true);
+        return this.show = true;
         //当次数为0，且选择普通通道时(假执行一次，且直接返回出去不执行接口逻辑，存储提交的数据)
       } else if (this.userinfo.buy_count == 0 && this.drawActiveId == 1) {
-        let storage = sessionStorage.getItem("SubmitMessage");
+        let storage = localStorage.getItem("SubmitMessage");
         this.shadow = true;
         this.loading = true;
         //如果没有数据就弹提交成功的窗口,有数据就弹多次提交的窗口
         if (!storage) {
-          sessionStorage.setItem("SubmitMessage", JSON.stringify(params));
+          localStorage.setItem("SubmitMessage", JSON.stringify(params));
           setTimeout(() => {
             this.shadow = false;
             this.noneVipShow = true;
@@ -894,7 +901,7 @@ export default {
     },
     //发起加速请求
     turnSpeedUp() {
-      let storage = JSON.parse(sessionStorage.getItem("SubmitMessage"));
+      let storage = JSON.parse(localStorage.getItem("SubmitMessage"));
       //发起请求
       this.$http
         .post("/api/v6.Aipainting/putTask", {
@@ -905,7 +912,7 @@ export default {
         .then((res) => {
           //当不是返回的错误码时，再次发起获取结果的请求
           if (res.status == 1) {
-            sessionStorage.removeItem("SubmitMessage");
+            localStorage.removeItem("SubmitMessage");
             this.$router.push("/works"); //提交成功之后关闭加速弹窗
           }
           console.log(res, "是否提交成功");
@@ -913,17 +920,20 @@ export default {
     },
     countDown() {
       //这里是已经有任务正在排队的人数倒计时
-      if(this.noneVipShowTips == true){
+      
         let x = document.getElementById('group')
         let time = 248078
         let countDowm = setInterval(()=>{
           time--
+          console.log(time)
           x.innerHTML = `当前预计排队${time}人`
-          if(this.noneVipShowTips == false){
+
+        },3000)
+        if(this.noneVipShowTips == false){
             clearInterval(countDowm)
           }
-        },3000)
-      }
+      
+      
       //下方是提交成功的倒计时
       // if(this.noneVipShow == true){
       //   let p = document.getElementById('success')
