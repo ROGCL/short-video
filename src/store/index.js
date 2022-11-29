@@ -6,8 +6,9 @@ Vue.use(Vuex);
 
 // State: 用于存储数据
 const state = {
-    userinfo: {},
-    reDrawInfo: {} // 重置绘画的数据
+    userinfo: {}, //用户信息
+    reDrawInfo: {}, // 重置绘画的数据
+    combosInfo:{} //套餐信息，提供给作品页使用
 };
 
 // Actions(行动): 处理交互行为

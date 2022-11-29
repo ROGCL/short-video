@@ -223,6 +223,13 @@ export default {
                 id:2,
                 text:'VIP加速'
             }],
+            noneVips:[{
+                id:1,
+                text:'知道了'
+            },{
+                id:2,
+                text:'点击加速'
+            }],
             noneVipTips:[{
                 id:1,
                 text:'取消任务'

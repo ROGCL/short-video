@@ -162,7 +162,9 @@
           <h4>购买成功</h4>
           <h5>已享免排队特权</h5>
         </div>
-        <div class="buySuccess-bottom" @click="turnSpeedUp">立即加速</div>
+        <div class="buySuccess-bottom" @click="turnSpeedUp">
+          立即加速
+        </div>
       </div>
     </van-popup>
   </div>
@@ -170,7 +172,7 @@
 
 <script>
 import { sendMessage, device } from "@/util/initChat";
-import { mapState, mapMutations } from "vuex";
+import { mapState,mapMutations } from "vuex";
 import myMin from "@/pages/home/js/index";
 export default {
   name: "works",
@@ -192,9 +194,9 @@ export default {
       combosActive: 0, // 选择的套餐
       shadow: false, //购买弹窗
       device: device, //设备型号字段
-      lineUp: true, //vip免排队展示
-      speedUp: false, //购买vip之后的展示
-      buySuccess: false, //购买成功之后的弹窗
+      lineUp:true, //vip免排队展示
+      speedUp:false, //购买vip之后的展示
+      buySuccess:false  //购买成功之后的弹窗
     };
   },
   mounted() {
@@ -205,9 +207,9 @@ export default {
     window.getAppParams = this.getAppParams; // IOS获取用户信息
     window.onPaySuccess = this.onPaySuccess; // 支付成功
     // console.log(device.system,'设备')
-    this.countDowm();
+    this.countDowm()
     this.info = sessionStorage.getItem("SubmitMessage");
-    console.log(this.userinfo.buy_count, "用户信息");
+    console.log(this.userinfo.buy_count,'用户信息')
   },
   computed: {
     ...mapState(["userinfo"]),
@@ -217,7 +219,14 @@ export default {
     //安卓购买成功的回传
     onPageResume() {
       this.getUserinfo();
-      console.log(this.userinfo, "购买次数");
+      console.log(this.userinfo,'购买次数')
+      if(this.userinfo.buy_count !== "0"){
+        this.lineUp = false
+        this.shadow = false
+        this.buySuccess = true
+      }else{
+        this.lineUp = true
+      }
     },
 
     // iOS 注入用户信息
@@ -230,13 +239,6 @@ export default {
           if (Object.keys(temp).length > 0) {
             this.setUserInfo(temp);
             console.log("获取用户数据成功ios", this.userinfo);
-            if (temp.buy_count != "0") {
-              this.lineUp = false;
-              this.shadow = false;
-              this.buySuccess = true;
-            } else {
-              this.lineUp = true;
-            }
           } else {
             sendMessage("jumpClientFunction", { linkType: 3000 });
           }
@@ -260,14 +262,6 @@ export default {
           // this.userinfo = JSON.parse(userinfo)
           this.setUserInfo(JSON.parse(userinfo));
           console.log("获取用户数据成功", this.userinfo);
-
-          if (userinfo.buy_count != '0') {
-            this.lineUp = false;
-            this.shadow = false;
-            this.buySuccess = true;
-          } else {
-            this.lineUp = true;
-          }
         } else {
           sendMessage("jumpClientFunction", { linkType: 3000 });
         }
@@ -295,6 +289,7 @@ export default {
     },
     //获取作品列表数据
     async getList() {
+      
       // console.log(this.info,'info')
       // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
@@ -308,7 +303,6 @@ export default {
       this.refreshing = false;
       if (err) return;
       this.taskConduct = res.taskConduct;
-      console.log(this.taskConduct, "状态为");
       if (this.page == 1) {
         this.list = res.list;
       } else {
@@ -326,12 +320,12 @@ export default {
       }
     },
     async cancel() {
-      if (this.info !== null || false) {
-        this.show = false;
-        sessionStorage.removeItem("SubmitMessage");
-        console.log(this.info, "移出保存");
-        this.info = null;
-        return;
+      if(this.info !== null || false){
+        this.show = false
+        sessionStorage.removeItem('SubmitMessage')
+        console.log(this.info,'移出保存')
+        this.info = null
+        return
       }
       this.show = false;
       const [err, res] = await this.$http.post("api/v6.Aipainting/cancel", {
@@ -341,6 +335,7 @@ export default {
       if (err) return;
       this.page = 1;
       this.getList();
+      
     },
     turnCombos() {
       this.shadow = true;
@@ -394,61 +389,58 @@ export default {
       this.payTypeActived = val;
     },
     //当有次数之后,点击加速按钮发起请求
-    turnSpeedUp() {
-      let storage = JSON.parse(this.info);
-      let artist = storage.artist;
-      let style = storage.style;
-      let ratio = storage.ratio;
-      let engine = storage.engine;
-      let init_image = storage.init_image;
-      let is_last_layer_skip = storage.is_last_layer_skip;
-      let enable_face_enhance = storage.enable_face_enhance;
-      let guidence_scale = storage.guidence_scale;
-      let init_strength = storage.init_strength;
-      let styleText = storage.styleText;
-      //发起请求
-      this.$http
-        .post("/api/v6.Aipainting/putTask", {
-          artist,
-          style,
-          ratio,
-          engine,
-          init_image,
-          is_last_layer_skip,
-          enable_face_enhance,
-          guidence_scale,
-          init_strength,
-          styleText,
-          uuid: this.userinfo.uuid,
-          platform: device.system,
-        })
-        .then((res) => {
-          //当不是返回的错误码时，再次发起获取结果的请求
-          if (res.status == 1) {
-            this.getList();
-            sessionStorage.removeItem("SubmitMessage");
-            this.buySuccess = false; //提交成功之后关闭加速弹窗
-          }
-          console.log(res, "是否提交成功");
-        })
-        .catch((err) => {
-          console.log(err, "是否未提交");
-        });
+    turnSpeedUp(){
+      let storage = JSON.parse(this.info)
+      let artist = storage.artist
+      let style = storage.style
+      let ratio = storage.ratio
+      let engine = storage.engine
+      let init_image = storage.init_image
+      let is_last_layer_skip = storage.is_last_layer_skip
+      let enable_face_enhance = storage.enable_face_enhance
+      let guidence_scale = storage.guidence_scale
+      let init_strength = storage.init_strength
+      let styleText = storage.styleText
+       //发起请求
+       this.$http.post('/api/v6.Aipainting/putTask',{
+        artist,
+        style,
+        ratio,
+        engine,
+        init_image,
+        is_last_layer_skip,
+        enable_face_enhance,
+        guidence_scale,
+        init_strength,
+        styleText,
+        uuid: this.userinfo.uuid,
+        platform: device.system,
+       }).then((res)=>{
+        //当不是返回的错误码时，再次发起获取结果的请求
+        if(res.status == 1){
+          this.getList()
+          sessionStorage.removeItem('SubmitMessage')
+          this.buySuccess = false  //提交成功之后关闭加速弹窗
+        }
+        console.log(res,'是否提交成功')
+       }).catch((err)=>{
+        console.log(err,'是否未提交')
+       })
     },
     //人数倒计时
-    countDowm() {
-      if (this.info !== null) {
-        let p = document.getElementById("peopleCount");
-        let people = 248078;
-        let count = setInterval(() => {
-          people--;
-          p.innerHTML = `${people}人正在您前面`;
-        }, 2000);
-        if (people == 20000 || this.info == null) {
-          clearInterval(count);
+    countDowm(){
+      if(this.info !== null){
+        let p = document.getElementById('peopleCount')
+        let people = 248078
+       let count = setInterval(()=>{
+          people--
+          p.innerHTML = `${people}人正在您前面`
+        },2000)
+        if(people == 20000 || this.info == null){
+          clearInterval(count)
         }
       }
-    },
+    }
   },
 };
 </script>
@@ -546,8 +538,8 @@ export default {
 }
 
 .content {
-  column-count: 2;
-  column-gap: 0.2667rem;
+  /* column-count: 2;
+  column-gap: 0.2667rem; */
   position: relative;
 }
 
@@ -827,41 +819,41 @@ export default {
   /* margin-left: 1.3333rem;
   margin-top: -.1067rem; */
 }
-.buySuccess {
+.buySuccess{
   z-index: 9999;
   width: 6.6933rem;
   height: 4.96rem;
-  border-radius: 0.4267rem;
+  border-radius: .4267rem;
   background: #fff;
 }
-.buySuccess-top {
+.buySuccess-top{
   width: 100%;
   height: 2.5867rem;
-  background-image: url("@/assets/img/making-img/3.png");
+  background-image: url('@/assets/img/making-img/3.png');
   background-size: 100% 100%;
 }
-.buySuccess-top h4 {
-  font-size: 0.5333rem;
+.buySuccess-top h4{
+  font-size: .5333rem;
   text-align: center;
-  padding-top: 0.96rem;
+  padding-top: .96rem;
 }
-.buySuccess-top h5 {
+.buySuccess-top h5{
   text-align: center;
-  font-size: 0.3733rem;
+  font-size: .3733rem;
   font-weight: normal;
-  padding-top: 0.16rem;
-  color: #7d808d;
+  padding-top: .16rem;
+  color: #7D808D;
 }
-.buySuccess-bottom {
-  width: 2.96rem;
-  height: 1.0667rem;
-  border-radius: 0.2133rem;
-  background: linear-gradient(135deg, #506cff 0%, #66c3ff 51%, #33e1d7 100%);
-  margin: 0.7733rem auto 0.5333rem;
-  text-align: center;
-  line-height: 1.0667rem;
-  color: #fff;
-  font-size: 0.3733rem;
-  font-weight: 600;
+.buySuccess-bottom{
+width: 2.96rem;
+height: 1.0667rem;
+border-radius: .2133rem;
+background: linear-gradient(135deg, #506CFF 0%, #66C3FF 51%, #33E1D7 100%);
+margin: .7733rem auto .5333rem;
+text-align: center;
+line-height: 1.0667rem;
+color: #fff;
+font-size: .3733rem;
+font-weight: 600;
 }
 </style>

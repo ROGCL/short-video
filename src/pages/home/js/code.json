@@ -198,7 +198,7 @@
             "image": ""
         }
     ],
-    "stable_diffusion": [ {
+    "stable_diffusion": [  {
         "text":"小兔子",
         "value":"Portrait of a super cute bunny, a carrot, pixar, zootopia, cgi, blade runner. trending on artstation",
         "content":"一只超级可爱的兔子的肖像，一只胡萝卜，皮克斯，动物主题，cgi，刀锋杀手。艺术站趋势",
@@ -231,8 +231,8 @@
     ],
     "acgn_diffusion": [ {
         "text":"二次元",
-        "value":"High quality, masterpiece, master's work, exquisite facial features, exquisite hair, exquisite eyes, exquisite colorful hair, outstanding facial features, gem eyes, small nose, beauty, goddess, scattered snow, roads, cars, buildings, houses, pedestrians, dizziness, railings, exquisite clothing, scarves",
-        "content":"高品质，杰作，大师之作，精致的五官刻画，精致的头发刻画，精致的眼睛刻画，精致的彩色头发，出色的五官，宝石眼，小巧的鼻子，美女，女神，飘散的雪花，马路，车，建筑，房子，行人， 晕，栏杆，精致的服饰，围巾",
+        "value":"Anime, light and shadow, details, exquisite lighting, correct proportion, perfect composition, masterpiece, masterpiece, high-quality and rich details, high-resolution, ultra-high quality, exquisite facial features, 4k quality, animation+(custom)",
+        "content":"二次元，光影，细节，打光精致，比例正确，完美构图，杰作，大师之作，高质量丰富细节，高分辨，超高画质，精致的五官刻画，4k画质，动漫+（自定义）",
         "image":""
     },
     {

@@ -356,6 +356,7 @@
             <h6 id="success">当前预计排队3028846人，请耐心等待！</h6>
           </div>
           <div class="none-vip-bottom-btn">
+            <!-- 这里是普通用户提交之前 -->
             <div
               class="inner-btn-box"
               v-for="item in noneVip"
@@ -389,6 +390,17 @@
               {{ item.text }}
             </div>
           </div>
+        </div>
+      </van-popup>
+
+      <!-- 购买成功之后的弹出层 -->
+      <van-popup v-model="buySuccess" round :close-on-click-overlay="false">
+        <div class="buySuccess">
+          <div class="buySuccess-top">
+            <h4>购买成功</h4>
+            <h5>已享免排队特权</h5>
+          </div>
+          <div class="buySuccess-bottom" @click="turnSpeedUp">立即加速</div>
         </div>
       </van-popup>
     </div>
@@ -445,6 +457,8 @@ export default {
       popuppricechooseDescribe: 0, //购买弹窗描述文字的颜色的索引
       time: 30, //时间倒计时秒数,用于非vip用户在未到时间内再次提交使用,
       lineUp: 248078, //排队人数,做递减
+      buyVip: true, //没有购买vip之前的弹窗样式
+      buySuccess: false, //购买成功之后的弹窗
     };
   },
 
@@ -559,6 +573,10 @@ export default {
         if (res && JSON.parse(res).userInfo) {
           let temp = JSON.parse(res).userInfo;
           if (Object.keys(temp).length > 0) {
+            if (temp.userinfo.buy_count != "0" && this.drawActiveId == 1) {
+              this.buyVip = false;
+              this.buySuccess = true;
+            }
             // this.userinfo = temp
             this.setUserInfo(temp);
             console.log("获取用户数据成功ios", this.userinfo);
@@ -585,6 +603,10 @@ export default {
           // this.userinfo = JSON.parse(userinfo)
           this.setUserInfo(JSON.parse(userinfo));
           this.buy_count = this.userinfo.buy_count;
+          if (userinfo.buy_count != "0" && this.drawActiveId == 1) {
+            this.buyVip = false;
+            this.buySuccess = true;
+          }
           console.log("获取用户数据成功", this.userinfo);
         } else {
           sendMessage("jumpClientFunction", { linkType: 3000 });
@@ -735,9 +757,6 @@ export default {
         return sendMessage("openToast", "请选择通道");
       }
 
-      this.shadow = true;
-      this.loading = true;
-
       //这里是不走请求的
       //这里的判断为当用户购买次数为0时，同时选择的时vip通道(直接拉起支付)
       if (this.userinfo.buy_count == 0 && this.drawActiveId == 2) {
@@ -745,12 +764,13 @@ export default {
         //当次数为0，且选择普通通道时(假执行一次，且直接返回出去不执行接口逻辑，存储提交的数据)
       } else if (this.userinfo.buy_count == 0 && this.drawActiveId == 1) {
         let storage = sessionStorage.getItem("SubmitMessage");
-        console.log(storage, "storage");
+        this.shadow = true;
+        this.loading = true;
         //如果没有数据就弹提交成功的窗口,有数据就弹多次提交的窗口
         if (!storage) {
           sessionStorage.setItem("SubmitMessage", JSON.stringify(params));
           setTimeout(() => {
-            this.shadow = true;
+            this.shadow = false;
             this.noneVipShow = true;
             this.worksPointShow = true;
             this.initForm(); //提交成功之后清空数据
@@ -766,12 +786,14 @@ export default {
           return;
         }
       }
-
+      this.shadow = true;
+      this.loading = true;
       const [err, res] = await this.$http.post(
         "/api/v6.Aipainting/putTask",
         params
       );
-
+      // this.shadow = true;
+      // this.loading = true;
       //重置表单
       this.initForm();
       setTimeout(() => {
@@ -865,15 +887,25 @@ export default {
     selectChoose(item) {
       if (item.id == 1) {
         this.noneVipShowTips = false;
-        this.shadow = false
+        this.shadow = false;
       } else {
         this.show = true;
-        if (this.buy_count == 0) {
-          this.noneVipShowTips = true;
-        } else {
-          item[2].text = "点击加速";
-        }
       }
+    },
+    //发起加速请求
+    turnSpeedUp() {
+      let storage = JSON.parse(sessionStorage.getItem("SubmitMessage"));
+      //发起请求
+      this.$http
+        .post("/api/v6.Aipainting/putTask", { ...storage })
+        .then((res) => {
+          //当不是返回的错误码时，再次发起获取结果的请求
+          if (res.status == 1) {
+            sessionStorage.removeItem("SubmitMessage");
+            this.$router.push("/works"); //提交成功之后关闭加速弹窗
+          }
+          console.log(res, "是否提交成功");
+        });
     },
     countDown() {
       //   let group = document.getElementById('group')
@@ -1918,5 +1950,42 @@ export default {
 .vipActiveMore {
   color: #fff;
   background: linear-gradient(160deg, #ffa985 0%, #ff4370 100%);
+}
+.buySuccess {
+  z-index: 9999;
+  width: 6.6933rem;
+  height: 4.96rem;
+  border-radius: 0.4267rem;
+  background: #fff;
+}
+.buySuccess-top {
+  width: 100%;
+  height: 2.5867rem;
+  background-image: url("@/assets/img/making-img/3.png");
+  background-size: 100% 100%;
+}
+.buySuccess-top h4 {
+  font-size: 0.5333rem;
+  text-align: center;
+  padding-top: 0.96rem;
+}
+.buySuccess-top h5 {
+  text-align: center;
+  font-size: 0.3733rem;
+  font-weight: normal;
+  padding-top: 0.16rem;
+  color: #7d808d;
+}
+.buySuccess-bottom {
+  width: 2.96rem;
+  height: 1.0667rem;
+  border-radius: 0.2133rem;
+  background: linear-gradient(135deg, #506cff 0%, #66c3ff 51%, #33e1d7 100%);
+  margin: 0.7733rem auto 0.5333rem;
+  text-align: center;
+  line-height: 1.0667rem;
+  color: #fff;
+  font-size: 0.3733rem;
+  font-weight: 600;
 }
 </style>
