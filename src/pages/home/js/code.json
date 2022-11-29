@@ -229,10 +229,10 @@
         "image":""
     }
     ],
-    "acgn_diffusion": [ {
+    "acgn_diffusion": [   {
         "text":"二次元",
         "value":"Anime, light and shadow, details, exquisite lighting, correct proportion, perfect composition, masterpiece, masterpiece, high-quality and rich details, high-resolution, ultra-high quality, exquisite facial features, 4k quality, animation+(custom)",
-        "content":"二次元，光影，细节，打光精致，比例正确，完美构图，杰作，大师之作，高质量丰富细节，高分辨，超高画质，精致的五官刻画，4k画质，动漫+（自定义）",
+        "content":"二次元，光影，细节，打光精致，比例正确，完美构图，杰作，大师之作，高质量丰富细节，高分辨，超高画质，精致的五官刻画，4k画质",
         "image":""
     },
     {
