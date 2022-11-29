@@ -920,18 +920,7 @@ export default {
     },
     countDown() {
       //这里是已经有任务正在排队的人数倒计时
-      
-        let x = document.getElementById('group')
-        let time = 248078
-        let countDowm = setInterval(()=>{
-          time--
-          console.log(time)
-          x.innerHTML = `当前预计排队${time}人`
 
-        },3000)
-        if(this.noneVipShowTips == false){
-            clearInterval(countDowm)
-          }
       
       
       //下方是提交成功的倒计时
