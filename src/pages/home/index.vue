@@ -912,26 +912,30 @@ export default {
         });
     },
     countDown() {
-      //   let group = document.getElementById('group')
-      //   let time = 248078
-      //   let countDown = setInterval(()=>{
-      //     group.innerHTML = `当前预计排队${time}人`
-      //     time--
-      //     if(time==20000){
-      //       clearInterval(countDown)
-      //     }
-      //     // console.log(time)
+      //这里是已经有任务正在排队的人数倒计时
+      if(this.noneVipShowTips == true){
+        let x = document.getElementById('group')
+        let time = 248078
+        let countDowm = setInterval(()=>{
+          time--
+          x.innerHTML = `当前预计排队${time}人`
+          if(this.noneVipShowTips == false){
+            clearInterval(countDowm)
+          }
+        },3000)
+      }
+      //下方是提交成功的倒计时
+      // if(this.noneVipShow == true){
+      //   let p = document.getElementById('success')
+      //   let timeCut = 3028846
+      //   let count = setInterval(()=>{
+      //    timeCut--
+      //    p.innerHTML = `当前预计排队${timeCut}人，请耐心等待！`
+      //    if(this.noneVipShow == false){
+      //     clearInterval(count)
+      //    }
       //   },2000)
-      //  let success = document.getElementById('success')
-      //  let finnal = 3028846
-      //   let countDownTime = setInterval(()=>{
-      //     success.innerHTML = `当前预计排队${finnal}人，请耐心等待！`
-      //     finnal--
-      //     if(time==20000){
-      //       clearInterval(countDownTime)
-      //     }
-      //     // console.log(time)
-      //   },2000)
+      // }
     },
   },
 };
