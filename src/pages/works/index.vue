@@ -6,7 +6,7 @@
       <div class="current ac" v-if="taskConduct > 0">
         <div class="ac">
           <img src="@/assets/img/1.png" class="loading-png" alt="" />
-          <span>绘画正在进行中，请下拉刷新查看</span>
+          <span @click="onRefresh">绘画正在进行中，请下拉刷新查看</span>
         </div>
         <img
           src="@/assets/img/4.png"
@@ -28,12 +28,11 @@
 
       <!-- 非vip排队中的提醒 -->
       <div class="notVip current" v-else-if="this.info !== null">
-        <h4 id="peopleCount">248078人正在您前面</h4>
-        <div class="turnBuy" @click="turnCombos" v-show="lineUp">VIP免排队</div>
-        <!-- 下面是普通用户购买次数后进行展示 -->
+        <h4 id="peopleCount">248078人在您前面</h4>
+        <div class="turnBuy" @click="turnCombos">VIP免排队</div>
         <div class="delBtn" @click="show = true"></div>
       </div>
-
+      <!-- <template v-if="list.length > 0"> -->
       <!-- 瀑布流 -->
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
           <van-list
@@ -43,7 +42,7 @@
             @load="loadmore"
             :immediate-check="false"
           >
-            <div class="content" v-if="list!==''">
+            <div class="content" v-if="list.length>0">
               <div
                 class="img-container"
                 @click="go(item)"
@@ -293,8 +292,6 @@ export default {
       this.finished = false;
       this.refreshing = true
       this.page = 1;
-      // this.list = []
-      // this.taskConduct = 0;
       // 重新加载数据
       this.getList();
     },
@@ -331,7 +328,7 @@ export default {
       }
     },
     async cancel() {
-      if (this.info !== null || false) {
+      if (this.info !== null) {
         this.show = false;
         localStorage.removeItem("SubmitMessage");
         console.log(this.info, "移出保存");
@@ -438,7 +435,7 @@ export default {
         let people = 248078;
         let count = setInterval(() => {
           people--;
-          p.innerHTML = `${people}人正在您前面`;
+          p.innerHTML = `${people}人在您前面`;
         }, 2000);
         if (people == 20000 || this.info == null) {
           clearInterval(count);
