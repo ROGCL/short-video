@@ -448,6 +448,9 @@ export default {
 </script>
 
 <style scoped>
+.wrapper /deep/ .van-list{
+  min-height: 95vh;
+}
 .wrapper {
   padding: 0.2667rem 0.4267rem;
   box-sizing: border-box;

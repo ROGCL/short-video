@@ -226,7 +226,7 @@
               </div>
             </div>
           </div>
-          <div class="slider-bottom-small-footer-box">
+          <!-- <div class="slider-bottom-small-footer-box">
             <h5>步数设置</h5>
             <div class="set-wrapper">
               <div
@@ -239,7 +239,7 @@
                 {{ item.text }}
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -371,7 +371,7 @@
         <div class="none-vip">
           <div class="none-vip-inner">
             <h5>提交成功</h5>
-            <h6 id="success">当前预计排队3028846人，请耐心等待！</h6>
+            <h6 id="success">当前预计排队{{people}}人，请耐心等待！</h6>
           </div>
           <div class="none-vip-bottom-btn">
             <!-- 这里是普通用户提交之前 -->
@@ -438,6 +438,8 @@ export default {
   mixins: [myMin],
   data() {
     return {
+      people:3028846,
+      counttimer:null,
       showTips: false, // 正在有绘画进行时提示弹窗
       docmHeight: document.documentElement.clientHeight, //默认屏幕高度
       showHeight: document.documentElement.clientHeight, //实时屏幕高度
@@ -477,6 +479,7 @@ export default {
       lineUp: 248078, //排队人数,做递减
       buyVip: true, //没有购买vip之前的弹窗样式
       buySuccess: false, //购买成功之后的弹窗
+      isUploadFlag:false,
     };
   },
 
@@ -528,6 +531,13 @@ export default {
         this.ratioAuto = false;
       }
     },
+    noneVipShow(val){
+      if(val){
+        this.countDown()
+      }else{
+        clearInterval(this.counttimer)
+      }
+    }
   },
   computed: {
     ...mapState(["reDrawInfo", "userinfo"]),
@@ -580,16 +590,19 @@ export default {
       this.drawActiveId = 1;
     },
     onPageResume() {
+      if(this.isUploadFlag) return
       this.getUserinfo();
       if (this.userinfo.buy_count != "0" && this.drawActiveId == 1) {
-            this.buyVip = false;
-            this.buySuccess = true;
+        console.log('照片回调')
+            // this.buyVip = false;
+            // this.buySuccess = true;
           }
     },
 
     // iOS 注入用户信息
     getAppParams(res) {
       console.log("设备信息", device.system);
+      if(this.isUploadFlag) return
       if (device.system == "ios") {
         console.log("获取getAppParams数据", res);
         if (res && JSON.parse(res).userInfo) {
@@ -610,11 +623,11 @@ export default {
         }
       }
     },
-
     // 原生app支付成功
-    onPaySuccess(res) {
+    onPaySuccess() {
       this.getUserinfo();
         if (this.userinfo.buy_count != "0" && this.drawActiveId == 1) {
+          
             this.buyVip = false;
             this.buySuccess = true;
           }
@@ -694,11 +707,13 @@ export default {
     },
     // 点击上传图片
     uploadImg() {
+      this.isUploadFlag = true
       sendMessage("openPhotoSelect", { selectType: 1, showGif: false });
     },
 
     // 上传图片完成
     async onPhotoSelectComplete(res) {
+      this.isUploadFlag = false
       this.init_image = decodeURIComponent(res);
       console.log("上传图片成功回调", res);
       this.initAutoRatio(this.init_image);
@@ -963,21 +978,19 @@ export default {
     countDown() {
       //这里是已经有任务正在排队的人数倒计时
 
-      
-      
       //下方是提交成功的倒计时
-      if(this.noneVipShow == true){
-        let p = document.getElementById('success')
-        let timeCut = 3028846
-        let count = setInterval(()=>{
-         timeCut--
-         console.log(timeCut)
-         p.innerHTML = `当前预计排队${timeCut}人，请耐心等待！`
-         if(this.noneVipShow == false){
-          clearInterval(count)
-         }
-        },2000)
-      }
+      // if(this.noneVipShow == true){
+        // let p = document.getElementById('success')
+        // let timeCut = 3028846
+        this.counttimer = setInterval(()=>{
+         this.people--
+        //  console.log(timeCut)
+        //  p.innerHTML = `当前预计排队${timeCut}人，请耐心等待！`
+        //  if(this.noneVipShow == false){
+        //   clearInterval(count)
+        //  }
+        },1000)
+      // }
     },
   },
 };
@@ -1321,7 +1334,7 @@ export default {
 .props {
   position: relative;
   width: 100%;
-  height: 4.8533rem;
+  height: 3.52rem;
   background: rgba(49, 55, 62, 0.5);
   border-radius: 0.2133rem;
 }
