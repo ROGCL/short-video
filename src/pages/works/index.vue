@@ -27,6 +27,7 @@
       </div>
 
       <!-- 非vip排队中的提醒 -->
+      
       <div class="notVip current" v-else-if="this.info !== null">
         <h4 id="peopleCount">{{people}}人在您前面</h4>
         <div class="turnBuy" @click="turnCombos">VIP免排队</div>
@@ -194,6 +195,13 @@ export default {
       people:90000
     };
   },
+  created(){
+    if(localStorage.getItem('time') !== null){
+      this.people = localStorage.getItem('time')
+    }else{
+      this.people = 90000
+    }
+  },
   mounted() {
     this.getList();
     // 获取套餐信息
@@ -202,13 +210,18 @@ export default {
     window.getAppParams = this.getAppParams; // IOS获取用户信息
     window.onPaySuccess = this.onPaySuccess; // 支付成功
     // console.log(device.system,'设备')
-    this.countDowm();
+    
     this.info = localStorage.getItem("SubmitMessage");
-    this.people = localStorage.getItem('time')
+
+    this.countDowm();
     console.log(this.userinfo.buy_count, "用户信息");
   },
 beforeDestroy(){
-  localStorage.setItem('time',this.people)
+  if(this.info !== null){
+    localStorage.setItem('time',this.people)
+  }else{
+    localStorage.removeItem('time')
+  }
 },
   computed: {
     ...mapState(["userinfo"]),
@@ -340,10 +353,12 @@ beforeDestroy(){
     },
     async cancel() {
       if (this.info !== null) {
-        this.show = false;
+        
+        localStorage.removeItem('time')
         localStorage.removeItem("SubmitMessage");
         console.log(this.info, "移出保存");
         this.info = null;
+        this.show = false;
         return;
       }
       this.show = false;

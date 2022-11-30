@@ -396,18 +396,12 @@
       >
         <div class="popup-noneVip">
           <div class="pop-title-noneVip">已有一个任务正在排队</div>
-          <h6 id="group">当前预计排队{{people}}人</h6>
-          <div class="ajc-noneVip">
             <div
               class="my-know"
-              v-for="item in noneVipTips"
-              :key="item.id"
-              :class="{ vipActiveMore: vipActiveMore == item.id }"
-              @click="selectChoose(item)"
+              @click="selectChoose"
             >
-              {{ item.text }}
+              我知道了
             </div>
-          </div>
         </div>
       </van-popup>
 
@@ -565,7 +559,6 @@ export default {
         this.showHeight = document.body.clientHeight;
       })();
     };
-    
   },
   methods: {
     ...mapMutations(["setUserInfo", "setreDrawInfo"]),
@@ -607,6 +600,12 @@ export default {
         console.log("获取getAppParams数据", res);
         if (res && JSON.parse(res).userInfo) {
           let temp = JSON.parse(res).userInfo;
+          let user = JSON.parse(temp)
+          if(user.buy_count != '0'){
+             this.drawActiveId = 2
+          }else{
+            this.drawActiveId = 1
+          }
           if (Object.keys(temp).length > 0) {
             // if (temp.userinfo.buy_count != "0" && this.drawActiveId == 1) {
             //   this.buyVip = false;
@@ -639,6 +638,12 @@ export default {
     getUserinfo() {
       if (device.system == "android") {
         let userinfo = sendMessage("getUserInfo");
+        let user = JSON.parse(userinfo)
+        if(user.buy_count != '0'){
+             this.drawActiveId = 2
+          }else{
+            this.drawActiveId = 1
+          }
         if (userinfo) {
           // this.userinfo = JSON.parse(userinfo)
           this.setUserInfo(JSON.parse(userinfo));
@@ -646,6 +651,8 @@ export default {
           //   this.buyVip = false;
           //   this.buySuccess = true;
           // }
+          
+
           console.log("获取用户数据成功", this.userinfo);
         } else {
           sendMessage("jumpClientFunction", { linkType: 3000 });
@@ -819,7 +826,7 @@ export default {
           return;
         } else {
           setTimeout(() => {
-            this.shadow = true;
+            this.shadow = false;
             this.noneVipShowTips = true;
             this.initForm();
           }, 2000);
@@ -929,13 +936,8 @@ export default {
       }
     },
     //非vip连续提交的判断
-    selectChoose(item) {
-      if (item.id == 1) {
+    selectChoose() {
         this.noneVipShowTips = false;
-        this.shadow = false;
-      } else {
-        this.show = true;
-      }
     },
     //发起加速请求
     async turnSpeedUp() {
@@ -955,7 +957,7 @@ export default {
             this.show = true; // 拉起支付
           } else if (err.code == "6011") {
             // 当前已经有绘画任务 提示弹窗
-            this.showTips = true;
+            this.noneVipShowTips = false;
           }
           // 关闭加载层
           
@@ -967,7 +969,7 @@ export default {
         this.buySuccess = false
         this.worksPointShow = true;
         this.loading = false;
-        this.$router.push('/works')
+        // this.$router.push('/works')
       }, 2000);
     },
       
@@ -1977,7 +1979,7 @@ export default {
 }
 .popup-noneVip {
   width: 6.6933rem;
-  height: 4.96rem;
+  height: 4.6933rem;
   border-radius: 0.2133rem;
   background-image: url(@/assets/img/5.png);
   background-size: 100% 100%;
@@ -1987,27 +1989,22 @@ export default {
   font-size: 0.5333rem;
   color: #000000;
   font-weight: bold;
-  padding-top: 0.7467rem;
+  padding-top:1.2267rem;
   text-align: center;
 }
-.popup-noneVip h6 {
+/* .popup-noneVip h6 {
   font-size: 0.3733rem;
   color: #7d808d;
   font-weight: normal;
   text-align: center;
   margin-top: 0.16rem;
   margin-bottom: 1.2267rem;
-}
-.ajc-noneVip {
-  display: flex;
-  justify-content: space-between;
-  width: 5.28rem;
-  height: 1.0667rem;
-  margin: 0 auto;
-}
+} */
 .my-know {
-  width: 2.4267rem;
+  width: 2.96rem;
   height: 1.0667rem;
+  margin-top: 1.12rem;
+  margin-left: 1.8667rem;
   border-radius: 0.2133rem;
   background: rgba(49, 55, 62, 0.1);
   font-size: 0.3733rem;
