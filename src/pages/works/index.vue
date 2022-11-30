@@ -191,15 +191,14 @@ export default {
       lineUp: true, //vip免排队展示
       speedUp: false, //购买vip之后的展示
       buySuccess: false, //购买成功之后的弹窗
-      time:90000, //时间
-      people:90000
+      people:Number(90000)
     };
   },
   created(){
     if(localStorage.getItem('time') !== null){
-      this.people = localStorage.getItem('time')
+      this.people = Number(localStorage.getItem('time'))
     }else{
-      this.people = 90000
+      this.people = Number(90000)
     }
   },
   mounted() {
@@ -457,10 +456,8 @@ beforeDestroy(){
     //人数倒计时
     countDowm() {
       if (this.info !== null) {
-        let p = document.getElementById("peopleCount");
         let count = setInterval(() => {
           this.people--;
-          p.innerHTML = `${this.people}人在您前面`;
         }, 2000);
         if (this.time == 20000 || this.info == null) {
           clearInterval(count);

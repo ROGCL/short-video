@@ -542,7 +542,7 @@ export default {
       new vconsole();
     }
     new vconsole();
-    console.log("更新20");
+    console.log("更新21");
     // 暴露方法给APP
     window.onPageResume = this.onPageResume; // 刷新
     window.getAppParams = this.getAppParams; // 获取用户信息
@@ -808,7 +808,19 @@ export default {
       //这里是不走请求的
       //这里的判断为当用户购买次数为0时，同时选择的时vip通道(直接拉起支付)
       if (this.userinfo.buy_count == 0 && this.drawActiveId == 2) {
-        return this.show = true;
+
+        if(localStorage.getItem('SubmitMessage')!== null){
+          this.shadow = true;
+        this.loading = true;
+          setTimeout(() => {
+            this.shadow = false;
+            this.noneVipShowTips = true;
+            this.initForm();
+          }, 2000);
+        }else{
+          return this.show = true;
+        }
+        
         //当次数为0，且选择普通通道时(假执行一次，且直接返回出去不执行接口逻辑，存储提交的数据)
       } else if (this.userinfo.buy_count == 0 && this.drawActiveId == 1) {
         let storage = localStorage.getItem("SubmitMessage");
@@ -824,7 +836,8 @@ export default {
             this.initForm(); //提交成功之后清空数据
           }, 2000);
           return;
-        } else {
+        }
+        else{
           setTimeout(() => {
             this.shadow = false;
             this.noneVipShowTips = true;
@@ -833,7 +846,13 @@ export default {
 
           return;
         }
-      }
+
+        
+      } 
+      // if(this.drawActiveId == 2 && localStorage.getItem('SubmitMessage')!== null){
+      //   this.show = false
+      //   this.noneVipShowTips = true
+      // }
       if(this.userinfo.buy_count != '0' && this.drawActiveId == 2 || this.drawActiveId == 1){
         this.shadow = true;
       this.loading = true;
@@ -853,6 +872,7 @@ export default {
           } else if (err.code == "6011") {
             // 当前已经有绘画任务 提示弹窗
             this.showTips = true;
+            console.log(localStorage.getItem('SubmitMessage'),'重复提交')
           }
           // 关闭加载层
           this.shadow = false;
