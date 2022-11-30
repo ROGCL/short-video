@@ -548,7 +548,7 @@ export default {
       new vconsole();
     }
     new vconsole();
-    console.log("更新16");
+    console.log("更新20");
     // 暴露方法给APP
     window.onPageResume = this.onPageResume; // 刷新
     window.getAppParams = this.getAppParams; // 获取用户信息
@@ -593,9 +593,9 @@ export default {
       if(this.isUploadFlag) return
       this.getUserinfo();
       if (this.userinfo.buy_count != "0" && this.drawActiveId == 1) {
-        console.log('照片回调')
-            // this.buyVip = false;
-            // this.buySuccess = true;
+        // console.log('照片回调')
+            this.buyVip = false;
+            this.buySuccess = true;
           }
     },
 
@@ -625,6 +625,7 @@ export default {
     },
     // 原生app支付成功
     onPaySuccess() {
+      if(this.isUploadFlag) return
       this.getUserinfo();
         if (this.userinfo.buy_count != "0" && this.drawActiveId == 1) {
           
@@ -990,7 +991,7 @@ export default {
         //  if(this.noneVipShow == false){
         //   clearInterval(count)
         //  }
-        },1000)
+        },2000)
       // }
     },
   },

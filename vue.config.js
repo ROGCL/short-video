@@ -4,5 +4,5 @@ module.exports = defineConfig({
     lintOnSave: false,
     // publicPath: '/media/page/painting/' 
          //记得打包时展开
-    // publicPath:'/media/page/painting_test/'
+    publicPath:'/media/page/painting_test/'
 })

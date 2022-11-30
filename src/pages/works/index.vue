@@ -28,55 +28,55 @@
 
       <!-- 非vip排队中的提醒 -->
       <div class="notVip current" v-else-if="this.info !== null">
-        <h4 id="peopleCount">248078人在您前面</h4>
+        <h4 id="peopleCount">{{people}}人在您前面</h4>
         <div class="turnBuy" @click="turnCombos">VIP免排队</div>
         <div class="delBtn" @click="show = true"></div>
       </div>
       <!-- <template v-if="list.length > 0"> -->
       <!-- 瀑布流 -->
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-          <van-list
-            v-model="loading"
-            :finished="finished"
-            :finished-text="list.length > 0 ? '没有更多了' : ''"
-            @load="loadmore"
-            :immediate-check="false"
-          >
-            <div class="content" v-if="list.length>0">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          :finished-text="list.length > 0 ? '没有更多了' : ''"
+          @load="loadmore"
+          :immediate-check="false"
+        >
+          <div class="content" v-if="list.length > 0">
+            <div
+              class="img-container"
+              @click="go(item)"
+              v-for="(item, index) in list"
+              :key="index"
+            >
+              <img
+                class="img-style"
+                :src="item.imageUrl ? item.imageUrl : imgerr"
+                alt="1"
+              />
               <div
-                class="img-container"
-                @click="go(item)"
-                v-for="(item, index) in list"
-                :key="index"
+                class="save ajc"
+                v-if="item.imageUrl"
+                @click.stop="save(item.imageUrl)"
               >
-                <img
-                  class="img-style"
-                  :src="item.imageUrl ? item.imageUrl : imgerr"
-                  alt="1"
-                />
-                <div
-                  class="save ajc"
-                  v-if="item.imageUrl"
-                  @click.stop="save(item.imageUrl)"
-                >
-                  保存
-                </div>
-                <img
-                  src="@/assets/img/new.png"
-                  class="newimg"
-                  alt=""
-                  v-show="index == 0"
-                />
+                保存
               </div>
+              <img
+                src="@/assets/img/new.png"
+                class="newimg"
+                alt=""
+                v-show="index == 0"
+              />
             </div>
-  
-            <div class="no-data" v-else>
-              <img src="@/assets/img/2.png" class="no-data-img" alt="" />
-              <div class="text">还没有作品哦</div>
-              <div class="btn" @click="back">去制作</div>
-            </div>
-          </van-list>
-        </van-pull-refresh>
+          </div>
+
+          <div class="no-data" v-else>
+            <img src="@/assets/img/2.png" class="no-data-img" alt="" />
+            <div class="text">还没有作品哦</div>
+            <div class="btn" @click="back">去制作</div>
+          </div>
+        </van-list>
+      </van-pull-refresh>
     </div>
 
     <!-- 取消弹窗 -->
@@ -190,6 +190,8 @@ export default {
       lineUp: true, //vip免排队展示
       speedUp: false, //购买vip之后的展示
       buySuccess: false, //购买成功之后的弹窗
+      time:90000, //时间
+      people:90000
     };
   },
   mounted() {
@@ -202,11 +204,12 @@ export default {
     // console.log(device.system,'设备')
     this.countDowm();
     this.info = localStorage.getItem("SubmitMessage");
+    this.people = localStorage.getItem('time')
     console.log(this.userinfo.buy_count, "用户信息");
   },
-  destroyed(){
-    console.log('页面被摧毁了')
-  },
+beforeDestroy(){
+  localStorage.setItem('time',this.people)
+},
   computed: {
     ...mapState(["userinfo"]),
   },
@@ -216,12 +219,15 @@ export default {
     onPageResume() {
       this.getUserinfo();
       if (this.userinfo.buy_count != "0") {
-              this.lineUp = false;
-              this.shadow = false;
-              this.buySuccess = true;
-            } else {
-              this.lineUp = true;
-            }
+        this.lineUp = false;
+        this.shadow = false;
+        console.log("%cindex.vue line:220 1", "color: #007acc;", 1);
+        if (localStorage.getItem("SubmitMessage")) {
+          this.buySuccess = true;
+        }
+      } else {
+        this.lineUp = true;
+      }
       console.log(this.userinfo, "购买次数");
     },
 
@@ -235,7 +241,6 @@ export default {
           if (Object.keys(temp).length > 0) {
             this.setUserInfo(temp);
             console.log("获取用户数据成功ios", this.userinfo);
-
           } else {
             sendMessage("jumpClientFunction", { linkType: 3000 });
           }
@@ -249,12 +254,15 @@ export default {
     onPaySuccess(res) {
       this.getUserinfo();
       if (this.userinfo.buy_count != "0") {
-              this.lineUp = false;
-              this.shadow = false;
-              this.buySuccess = true;
-            } else {
-              this.lineUp = true;
-            }
+        this.lineUp = false;
+        this.shadow = false;
+        console.log("%cindex.vue line:254 2", "color: #007acc;", 2);
+        if (localStorage.getItem("SubmitMessage")) {
+          this.buySuccess = true;
+        }
+      } else {
+        this.lineUp = true;
+      }
     },
     /**
      * 获取用户信息，如果没有用户信息表示没有登录；需要跳转登录
@@ -293,7 +301,7 @@ export default {
     onRefresh() {
       // 清空列表数据
       this.finished = false;
-      this.refreshing = true
+      this.refreshing = true;
       this.page = 1;
       // 重新加载数据
       this.getList();
@@ -402,46 +410,44 @@ export default {
     async turnSpeedUp() {
       let storage = JSON.parse(this.info);
       //发起请求
-     const [res,err] = await this.$http
-        .post("/api/v6.Aipainting/putTask", {
-          ...storage,
-          uuid: this.userinfo.uuid,
-          platform: device.system,
-        })
-        setTimeout(()=>{
-          if(err){
-          if(err.code == "6010"){
-            this.shadow = true
-            return
+      const [res, err] = await this.$http.post("/api/v6.Aipainting/putTask", {
+        ...storage,
+        uuid: this.userinfo.uuid,
+        platform: device.system,
+      });
+      setTimeout(() => {
+        if (err) {
+          if (err.code == "6010") {
+            this.shadow = true;
+            return;
           }
           //成功重新获取表单
           this.getList();
           //移除存储的数据
           localStorage.removeItem("SubmitMessage");
           //关闭弹窗
-          this.buySuccess = false
+          this.buySuccess = false;
         }
-        },1000)
-        // .then((res) => {
-        //   //当不是返回的错误码时，再次发起获取结果的请求
-        //   if (res.status == 1) {
-        //     this.getList();
-        //     localStorage.removeItem("SubmitMessage");
-        //     this.buySuccess = false; //提交成功之后关闭加速弹窗
-        //   }
-        //   console.log(res, "是否提交成功");
-        // })
+      }, 1000);
+      // .then((res) => {
+      //   //当不是返回的错误码时，再次发起获取结果的请求
+      //   if (res.status == 1) {
+      //     this.getList();
+      //     localStorage.removeItem("SubmitMessage");
+      //     this.buySuccess = false; //提交成功之后关闭加速弹窗
+      //   }
+      //   console.log(res, "是否提交成功");
+      // })
     },
     //人数倒计时
     countDowm() {
       if (this.info !== null) {
         let p = document.getElementById("peopleCount");
-        let people = 248078;
         let count = setInterval(() => {
-          people--;
-          p.innerHTML = `${people}人在您前面`;
+          this.people--;
+          p.innerHTML = `${this.people}人在您前面`;
         }, 2000);
-        if (people == 20000 || this.info == null) {
+        if (this.time == 20000 || this.info == null) {
           clearInterval(count);
         }
       }
@@ -451,8 +457,8 @@ export default {
 </script>
 
 <style scoped>
-.wrapper /deep/ .van-list{
-  min-height: 80vh;
+.wrapper /deep/ .van-list {
+  min-height: 70vh;
 }
 .wrapper {
   padding: 0.2667rem 0.4267rem;
@@ -558,7 +564,7 @@ export default {
   position: relative;
 }
 
-.img-container:nth-child(2n+1) {
+.img-container:nth-child(2n + 1) {
   /* padding-left: .1333rem; */
   padding-right: 0.0667rem;
 }
