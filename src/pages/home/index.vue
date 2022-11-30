@@ -396,7 +396,7 @@
       >
         <div class="popup-noneVip">
           <div class="pop-title-noneVip">已有一个任务正在排队</div>
-          <h6 id="group">当前预计排队248078人</h6>
+          <h6 id="group">当前预计排队{{people}}人</h6>
           <div class="ajc-noneVip">
             <div
               class="my-know"
@@ -548,7 +548,7 @@ export default {
       new vconsole();
     }
     new vconsole();
-    console.log("更新13");
+    console.log("更新16");
     // 暴露方法给APP
     window.onPageResume = this.onPageResume; // 刷新
     window.getAppParams = this.getAppParams; // 获取用户信息
@@ -922,6 +922,7 @@ export default {
         this.show = true;
         this.noneVipShow = false;
       } else {
+        
         this.noneVipShow = false;
         this.$router.push("/works");
       }

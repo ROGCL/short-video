@@ -204,6 +204,9 @@ export default {
     this.info = localStorage.getItem("SubmitMessage");
     console.log(this.userinfo.buy_count, "用户信息");
   },
+  destroyed(){
+    console.log('页面被摧毁了')
+  },
   computed: {
     ...mapState(["userinfo"]),
   },
@@ -449,7 +452,7 @@ export default {
 
 <style scoped>
 .wrapper /deep/ .van-list{
-  min-height: 95vh;
+  min-height: 80vh;
 }
 .wrapper {
   padding: 0.2667rem 0.4267rem;

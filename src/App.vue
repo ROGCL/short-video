@@ -1,6 +1,6 @@
 <template>
   <div>
-    <keep-alive :include="include">
+    <keep-alive :include="[include,'works']">
       <router-view  />
     </keep-alive>
     <!-- <router-view v-if="!$route.meta.keepAlive" /> -->
