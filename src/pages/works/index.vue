@@ -396,37 +396,38 @@ export default {
       this.payTypeActived = val;
     },
     //当有次数之后,点击加速按钮发起请求
-    turnSpeedUp() {
+    async turnSpeedUp() {
       let storage = JSON.parse(this.info);
-      // let artist = storage.artist;
-      // let style = storage.style;
-      // let ratio = storage.ratio;
-      // let engine = storage.engine;
-      // let init_image = storage.init_image;
-      // let is_last_layer_skip = storage.is_last_layer_skip;
-      // let enable_face_enhance = storage.enable_face_enhance;
-      // let guidence_scale = storage.guidence_scale;
-      // let init_strength = storage.init_strength;
-      // let styleText = storage.styleText;
       //发起请求
-      this.$http
+     const [res,err] = await this.$http
         .post("/api/v6.Aipainting/putTask", {
           ...storage,
           uuid: this.userinfo.uuid,
           platform: device.system,
         })
-        .then((res) => {
-          //当不是返回的错误码时，再次发起获取结果的请求
-          if (res.status == 1) {
-            this.getList();
-            localStorage.removeItem("SubmitMessage");
-            this.buySuccess = false; //提交成功之后关闭加速弹窗
+        setTimeout(()=>{
+          if(err){
+          if(err.code == "6010"){
+            this.shadow = true
+            return
           }
-          console.log(res, "是否提交成功");
-        })
-        .catch((err) => {
-          console.log(err, "是否未提交");
-        });
+          //成功重新获取表单
+          this.getList();
+          //移除存储的数据
+          localStorage.removeItem("SubmitMessage");
+          //关闭弹窗
+          this.buySuccess = false
+        }
+        },1000)
+        // .then((res) => {
+        //   //当不是返回的错误码时，再次发起获取结果的请求
+        //   if (res.status == 1) {
+        //     this.getList();
+        //     localStorage.removeItem("SubmitMessage");
+        //     this.buySuccess = false; //提交成功之后关闭加速弹窗
+        //   }
+        //   console.log(res, "是否提交成功");
+        // })
     },
     //人数倒计时
     countDowm() {

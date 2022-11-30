@@ -139,8 +139,7 @@
           <div class="reupload ajc" @click="uploadImg">重新上传</div>
         </div>
       </div>
-      <!-- 选择通道 -->
-      <div class="title-public">
+      <!-- <div class="title-public">
         <img src="@/assets/img/index-img/25.png" alt="" class="image-public" />
       </div>
       <div class="path-road">
@@ -156,10 +155,9 @@
           <h5 class="h5-pub vipActive" v-else>VIP加速</h5>
           <h6 class="h6-pub" v-if="item.id == 1">预计排队99999人</h6>
           <h6 class="h6-pub" v-else>{{ item.h6 }}</h6>
-          <!-- 超快压层 -->
           <div class="fast-pannel" v-show="item.id == 2"></div>
         </div>
-      </div>
+      </div> -->
       <!-- 效果图比例 -->
       <div class="title-public">
         <img src="@/assets/img/index-img/23.png" alt="" class="image-public" />
@@ -250,10 +248,30 @@
         <div class="begin-btn">开始绘画</div>
       </router-link> -->
       <div :class="!hideshow ? 'none' : 'block'">
-        <div class="begin-zw"></div>
+        <div class="begin-zw">
+          
+        
         <div class="begin-wrapper">
+          <div class="path-road">
+        <div
+          class="normal width-public"
+          v-for="item in drawChanels"
+          :key="item.id"
+          :class="{ borderpubs: drawActiveId === item.id }"
+          @click="drawChanelChoose(item)"
+        >
+          <img :src="item.img" alt="" />
+          <h5 class="h5-pub" v-if="item.id == 1" style="color: #fff">普通</h5>
+          <h5 class="h5-pub vipActive" v-else>VIP加速</h5>
+          <h6 class="h6-pub" v-if="item.id == 1">预计排队99999人</h6>
+          <h6 class="h6-pub" v-else>{{ item.h6 }}</h6>
+          <!-- 超快压层 -->
+          <div class="fast-pannel" v-show="item.id == 2"></div>
+        </div>
+      </div>
           <div class="begin-btn" @click="startDraw">开始绘画</div>
         </div>
+      </div>
       </div>
     </div>
     <!-- 弹出层，当没有次数时弹出,有次数直接打开编辑页面 -->
@@ -520,7 +538,7 @@ export default {
       new vconsole();
     }
     new vconsole();
-    console.log("更新9");
+    console.log("更新13");
     // 暴露方法给APP
     window.onPageResume = this.onPageResume; // 刷新
     window.getAppParams = this.getAppParams; // 获取用户信息
@@ -793,7 +811,8 @@ export default {
           return;
         }
       }
-      this.shadow = true;
+      if(this.userinfo.buy_count != '0' && this.drawActiveId == 2 || this.drawActiveId == 1){
+        this.shadow = true;
       this.loading = true;
       const [err, res] = await this.$http.post(
         "/api/v6.Aipainting/putTask",
@@ -820,6 +839,8 @@ export default {
         this.worksPointShow = true;
         this.loading = false;
       }, 2000);
+      }
+
     },
 
     // 选择套餐
@@ -900,24 +921,45 @@ export default {
       }
     },
     //发起加速请求
-    turnSpeedUp() {
+    async turnSpeedUp() {
       let storage = JSON.parse(localStorage.getItem("SubmitMessage"));
       //发起请求
-      this.$http
-        .post("/api/v6.Aipainting/putTask", {
+      this.shadow = true;
+      this.loading = true;
+    const [err,res] = await this.$http.post("/api/v6.Aipainting/putTask", {
           ...storage,
           uuid: this.userinfo.uuid,
           platform: device.system,
         })
-        .then((res) => {
-          //当不是返回的错误码时，再次发起获取结果的请求
-          if (res.status == 1) {
-            localStorage.removeItem("SubmitMessage");
-            this.$router.push("/works"); //提交成功之后关闭加速弹窗
+        setTimeout(() => {
+        if (err) {
+          // 次数不足 需要购买（次数不足且选的是vip通道时）
+          if (err.code == "6010" && this.drawActiveId == 2) {
+            this.show = true; // 拉起支付
+          } else if (err.code == "6011") {
+            // 当前已经有绘画任务 提示弹窗
+            this.showTips = true;
           }
-          console.log(res, "是否提交成功");
-        });
+          // 关闭加载层
+          
+          this.shadow = false;
+          
+          return;
+        }
+        // 请求成功
+        this.buySuccess = false
+        this.worksPointShow = true;
+        this.loading = false;
+        this.$router.push('/works')
+      }, 2000);
     },
+      
+          //当不是返回的错误码时，再次发起获取结果的请求
+          // if (res.status == 1) {
+          //   localStorage.removeItem("SubmitMessage");
+          //   this.$router.push("/works"); //提交成功之后关闭加速弹窗
+          // }
+    
     countDown() {
       //这里是已经有任务正在排队的人数倒计时
 
@@ -1380,21 +1422,23 @@ export default {
   display: flex;
   justify-content: space-around;
   width: 100%;
-  height: 2.1867rem;
+  margin-bottom: .5333rem;
+  margin-top: .1333rem;
 }
 
 .width-public {
   width: 4.4533rem;
-  height: 2.1867rem;
+  height:1.7067rem;
   background: rgba(49, 55, 62, 0.5);
   border-radius: 0.2133rem;
+  margin-right: .08rem;
 }
 .fast-pannel {
   width: 1.0133rem;
   height: 0.48rem;
   background-image: url("@/assets/img/index-img/3.png");
   background-size: 100% 100%;
-  transform: translateY(-1.92rem);
+  transform: translateY(-1.7067rem);
 }
 .vipActive {
   color: #66c3ff;
@@ -1428,7 +1472,7 @@ export default {
 }
 
 .normal img {
-  margin-top: 0.6933rem;
+  margin-top: .4533rem;
   margin-left: 0.2667rem;
   width: 0.8rem;
   height: 0.8rem;
@@ -1437,7 +1481,7 @@ export default {
 .h5-pub {
   position: absolute;
   left: 1.2267rem;
-  top: 0.4267rem;
+  top: .2667rem;
   font-size: 0.4267rem;
   /* color: #fff; */
 }
@@ -1445,13 +1489,14 @@ export default {
 .h6-pub {
   position: absolute;
   left: 1.2267rem;
-  top: 1.2267rem;
+  top: .9867rem;
   font-size: 0.32rem;
   color: #7d808d;
 }
 
 .begin-zw {
-  height: 2.1333rem;
+  /* height: 2.1333rem; */
+  height: 4.32rem;
 }
 
 .begin-wrapper {
@@ -1494,7 +1539,7 @@ export default {
 
 .borderpubs {
   border: 0.0267rem solid #66c3ff;
-  border-radius: 0.08rem;
+  border-radius: .1333rem;
   /* color: #66C3FF */
   /* border-image: linear-gradient(135deg,
       rgba(80, 108, 255, 1),
