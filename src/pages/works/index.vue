@@ -551,7 +551,7 @@ export default {
   position: relative;
 }
 
-.img-container:nth-child(2n + 1) {
+.img-container:nth-child(2n+1) {
   /* padding-left: .1333rem; */
   padding-right: 0.0667rem;
 }

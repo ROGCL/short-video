@@ -924,17 +924,18 @@ export default {
       
       
       //下方是提交成功的倒计时
-      // if(this.noneVipShow == true){
-      //   let p = document.getElementById('success')
-      //   let timeCut = 3028846
-      //   let count = setInterval(()=>{
-      //    timeCut--
-      //    p.innerHTML = `当前预计排队${timeCut}人，请耐心等待！`
-      //    if(this.noneVipShow == false){
-      //     clearInterval(count)
-      //    }
-      //   },2000)
-      // }
+      if(this.noneVipShow == true){
+        let p = document.getElementById('success')
+        let timeCut = 3028846
+        let count = setInterval(()=>{
+         timeCut--
+         console.log(timeCut)
+         p.innerHTML = `当前预计排队${timeCut}人，请耐心等待！`
+         if(this.noneVipShow == false){
+          clearInterval(count)
+         }
+        },2000)
+      }
     },
   },
 };
