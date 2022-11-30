@@ -25,7 +25,7 @@ const routes = [{
             keepAlive: true
         },
         component: () =>
-            import ('@/pages/works/index')
+            import ('@/pages/works/index copy.vue')
     },
     {
         path: '/works/detail',

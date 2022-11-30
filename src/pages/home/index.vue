@@ -263,7 +263,7 @@
           <img :src="item.img" alt="" />
           <h5 class="h5-pub" v-if="item.id == 1" style="color: #fff">普通</h5>
           <h5 class="h5-pub vipActive" v-else>VIP加速</h5>
-          <h6 class="h6-pub" v-if="item.id == 1">预计排队99999人</h6>
+          <h6 class="h6-pub" v-if="item.id == 1">预计排队90000+人</h6>
           <h6 class="h6-pub" v-else>{{ item.h6 }}</h6>
           <!-- 超快压层 -->
           <div class="fast-pannel" v-show="item.id == 2"></div>
@@ -438,7 +438,7 @@ export default {
   mixins: [myMin],
   data() {
     return {
-      people:3028846,
+      people:90000,
       counttimer:null,
       showTips: false, // 正在有绘画进行时提示弹窗
       docmHeight: document.documentElement.clientHeight, //默认屏幕高度

@@ -3,10 +3,11 @@ import App from './App.vue'
 import Vant from 'vant';
 import 'vant/lib/index.css';
 import router from '@/router/index'
+import { VueMasonryPlugin } from 'vue-masonry'; //瀑布流插件
 import store from "./store"; // 引入 store 文件
 
 import axios from '@/util/axios';
-
+Vue.use(VueMasonryPlugin)
 Vue.use(Vant)
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
