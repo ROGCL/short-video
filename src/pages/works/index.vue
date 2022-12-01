@@ -195,6 +195,7 @@ export default {
     };
   },
   created(){
+    //判断是否获取到了时间参数，没有获取到就给他默认值
     if(localStorage.getItem('time') !== null){
       this.people = Number(localStorage.getItem('time'))
     }else{
@@ -435,13 +436,13 @@ beforeDestroy(){
             this.shadow = true;
             return;
           }
+        }
           //成功重新获取表单
           this.getList();
           //移除存储的数据
           localStorage.removeItem("SubmitMessage");
           //关闭弹窗
           this.buySuccess = false;
-        }
       }, 1000);
       // .then((res) => {
       //   //当不是返回的错误码时，再次发起获取结果的请求

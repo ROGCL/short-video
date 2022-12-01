@@ -542,7 +542,7 @@ export default {
       new vconsole();
     }
     new vconsole();
-    console.log("更新22");
+    console.log("更新23");
     // 暴露方法给APP
     window.onPageResume = this.onPageResume; // 刷新
     window.getAppParams = this.getAppParams; // 获取用户信息
@@ -585,10 +585,10 @@ export default {
     onPageResume() {
       if(this.isUploadFlag) return
       this.getUserinfo();
-      if (this.userinfo.buy_count != "0" && this.drawActiveId == 1) {
+      if (this.userinfo.buy_count != "0" && localStorage.getItem('SubmitMessage')!==null) {
         // console.log('照片回调')
-            this.buyVip = false;
-            this.buySuccess = true;
+        this.noneVipShow = false;
+        this.buySuccess = true;
           }
     },
 
@@ -626,10 +626,10 @@ export default {
     onPaySuccess() {
       if(this.isUploadFlag) return
       this.getUserinfo();
-        if (this.userinfo.buy_count != "0" && this.drawActiveId == 1) {
-          
-            this.buyVip = false;
-            this.buySuccess = true;
+      if (this.userinfo.buy_count != "0" && localStorage.getItem('SubmitMessage')!==null) {
+        // console.log('照片回调')
+        this.noneVipShow = false;
+        this.buySuccess = true;
           }
     },
     /**
@@ -948,7 +948,6 @@ export default {
     choosePath(item) {
       if (item.id == 2) {
         this.show = true;
-        this.noneVipShow = false;
       } else {
         
         this.noneVipShow = false;
@@ -985,8 +984,11 @@ export default {
           
           return;
         }
+        console.log(localStorage.getItem('SubmitMessage'))
         // 请求成功
+        localStorage.removeItem('SubmitMessage')
         this.buySuccess = false
+        
         this.worksPointShow = true;
         this.loading = false;
         // this.$router.push('/works')
@@ -1999,7 +2001,7 @@ export default {
 }
 .popup-noneVip {
   width: 6.6933rem;
-  height: 4.6933rem;
+  height: 3.7687rem;
   border-radius: 0.2133rem;
   background-image: url(@/assets/img/5.png);
   background-size: 100% 100%;
@@ -2009,7 +2011,7 @@ export default {
   font-size: 0.5333rem;
   color: #000000;
   font-weight: bold;
-  padding-top:1.2267rem;
+  padding-top:.56rem;
   text-align: center;
 }
 /* .popup-noneVip h6 {
@@ -2023,7 +2025,7 @@ export default {
 .my-know {
   width: 2.96rem;
   height: 1.0667rem;
-  margin-top: 1.12rem;
+  margin-top: .9867rem;
   margin-left: 1.8667rem;
   border-radius: 0.2133rem;
   background: rgba(49, 55, 62, 0.1);
