@@ -607,18 +607,13 @@ export default {
         console.log("获取getAppParams数据", res);
         if (res && JSON.parse(res).userInfo) {
           let temp = JSON.parse(res).userInfo;
-          let user = JSON.parse(temp)
-          if(user.buy_count != '0'){
-             this.drawActiveId = 2
-          }else{
-            this.drawActiveId = 1
-          }
+          // let user = JSON.parse(temp)
+          // if(user.buy_count != '0'){
+          //    this.drawActiveId = 2
+          // }else{
+          //   this.drawActiveId = 1
+          // }
           if (Object.keys(temp).length > 0) {
-            // if (temp.userinfo.buy_count != "0" && this.drawActiveId == 1) {
-            //   this.buyVip = false;
-            //   this.buySuccess = true;
-            // }
-            // this.userinfo = temp
             this.setUserInfo(temp);
             console.log("获取用户数据成功ios", this.userinfo);
           } else {
