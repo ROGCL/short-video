@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <script src="./flexible.min.js"></script>
+    <script src="./umsdk.js"></script>
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+
+<body>
+    <noscript>
+        <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+                Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+</body>
+
+<script>
+    (function(w, d, s, q, i) {
+        w[q] = w[q] || [];
+        var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s);
+        j.async = true;
+        j.id = 'beacon-aplus';
+        j.src = 'https://d.alicdn.com/alilog/mlog/aplus/' + i + '.js';
+        f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'aplus_queue', '203467608');
+
+    // aplus_queue.push({
+    //     action: 'aplus.setMetaInfo',
+    //     arguments: ['appKey', '62d771bf05844627b5f3f882']
+    // });
+
+
+    // function sendEvent() {
+    //     aplus_queue.push({
+    //         action: "aplus.record",
+    //         arguments: ["handleClickOpenButtonEvent", "CLK"]
+    //     })
+    // }
+</script>
+
+</html>
