@@ -608,11 +608,11 @@ export default {
         if (res && JSON.parse(res).userInfo) {
           let temp = JSON.parse(res).userInfo;
           // let user = JSON.parse(temp)
-          // if(user.buy_count != '0'){
-          //    this.drawActiveId = 2
-          // }else{
-          //   this.drawActiveId = 1
-          // }
+          if(temp.buy_count != '0'){
+             this.drawActiveId = 2
+          }else{
+            this.drawActiveId = 1
+          }
           if (Object.keys(temp).length > 0) {
             this.setUserInfo(temp);
             console.log("获取用户数据成功ios", this.userinfo);
@@ -640,15 +640,17 @@ export default {
     getUserinfo() {
       if (device.system == "android") {
         let userinfo = sendMessage("getUserInfo");
-        let user = JSON.parse(userinfo)
-        if(user.buy_count != '0'){
-             this.drawActiveId = 2
-          }else{
-            this.drawActiveId = 1
-          }
+ 
         if (userinfo) {
           // this.userinfo = JSON.parse(userinfo)
-          this.setUserInfo(JSON.parse(userinfo));
+          let user = JSON.parse(userinfo)
+          this.setUserInfo(user);
+
+          if(user.buy_count != '0'){
+              this.drawActiveId = 2
+            }else{
+              this.drawActiveId = 1
+            }
           // if (userinfo.buy_count != "0" && this.drawActiveId == 1) {
           //   this.buyVip = false;
           //   this.buySuccess = true;
