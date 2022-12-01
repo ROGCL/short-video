@@ -507,9 +507,9 @@ export default {
           setTimeout(() => {
             this.promptIndex = idx2 > -1 ? idx2 : 0;
             this.promptValue = val.TextPrompt;
-            this.init_image = val.imageUrl;
+            this.init_image = val.InitImagePath;
             // 自动初始化图片比列
-            this.initAutoRatio(val.imageUrl);
+            this.initAutoRatio(val.InitImagePath);
           }, 200);
           this.setreDrawInfo({});
         }
@@ -542,7 +542,7 @@ export default {
       new vconsole();
     }
     new vconsole();
-    console.log("更新23");
+    console.log("更新25");
     // 暴露方法给APP
     window.onPageResume = this.onPageResume; // 刷新
     window.getAppParams = this.getAppParams; // 获取用户信息
@@ -553,6 +553,13 @@ export default {
     // 获取套餐信息
     this.getCombsInfo();
     this.countDown(); //非vip用户在此倒计时内在提交弹窗
+
+    let info = localStorage.getItem("SubmitMessage");
+
+    if(info && this.userinfo.buy_count> 0){
+      this.buySuccess = true
+    }
+
     // window.onresize监听页面高度的变化
     window.onresize = () => {
       return (() => {

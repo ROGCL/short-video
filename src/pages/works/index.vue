@@ -213,6 +213,11 @@ export default {
     
     this.info = localStorage.getItem("SubmitMessage");
 
+    if(this.info && this.userinfo.buy_count> 0){
+      this.buySuccess = true
+    }
+    
+
     this.countDowm();
     console.log(this.userinfo.buy_count, "用户信息");
   },
