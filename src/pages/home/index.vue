@@ -542,7 +542,7 @@ export default {
       new vconsole();
     }
     new vconsole();
-    console.log("更新21");
+    console.log("更新22");
     // 暴露方法给APP
     window.onPageResume = this.onPageResume; // 刷新
     window.getAppParams = this.getAppParams; // 获取用户信息
