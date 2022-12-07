@@ -480,9 +480,9 @@ export default {
  */
     async startDraw() {
       //当不是vip时，直接拉起会员中心进行支付
-      // if (!this.userinfo.is_vip && !this.userinfo.is_enterprise) {
-      //   return sendMessage('openAppPay')
-      // }
+      if (!this.userinfo.is_vip && !this.userinfo.is_enterprise) {
+        return sendMessage('openAppPay')
+      }
       if (this.promptValue == '') {
         return sendMessage('openToast', '请填写关键词')
       }
