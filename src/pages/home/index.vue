@@ -53,7 +53,7 @@
           v-for="(item, index) in promptActiveList"
           :key="item.id"
           :class="{ borderpub: promptIndex == index }"
-          @click="promptChange(index)"
+          @click="promptChange(index,'promptIndex')"
         >
           {{ item.text }}
         </div>
@@ -897,13 +897,16 @@ export default {
     },
 
     // 关键词切换
-    promptChange(index) {
-      if (this.promptIndex == index) {
+    promptChange(index,field) {
+      if (this.promptIndex == index || this[field] == index) {
         this.promptIndex = 0;
         this.promptValue = this.promptActiveList[this.promptIndex].content;
+        this[field] = -1
+        this.promptValue = ''
       } else {
         this.promptValue = this.promptActiveList[index].content;
         this.promptIndex = index;
+        this[field] = index;
       }
     },
 
