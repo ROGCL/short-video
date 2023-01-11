@@ -235,14 +235,7 @@
         "image":""
     }
     ],
-    "acgn_diffusion": [        
-        {
-            "text": "新年快乐",
-            "value": "High quality, masterpiece, master's work, exquisite facial features, exquisite. Hair depiction, exquisite eye depiction, exquisite, peerless beauty, 4k image quality, gorgeous light and shadow, Tindal effect, halo, messy hair, gorgeous scene, exquisite clothes, messy hair, beautiful and delicate eyes, a girl, dynamic angle, precious stone eyes, gorgeous clothes, gorgeous, gorgeous, red fragments, extremely delicate and beautiful, royal sister, national style, Chinese knot, red lantern, red ribbon, red flower, festive, Chinese style, Hanfu, Chinese Hanfu, golden fragments, anime style",
-            "content": "高品质，杰作，大师之作，精致的五官刻画，精致。的头发刻画，精致的眼睛刻画，精致的，绝世美人，4k画质，绚丽的光影，丁达尔效应，光晕，凌乱的发丝，华丽的场景，精致的衣服，蓬乱的头 发，美丽细致的眼睛，一个女孩，动态角度，宝石眼，华丽的衣服，华丽，红色碎片，极其细腻美 丽，御姐，国风，中国结，红灯笼，红丝带，红花、喜庆，中国风，汉服，中国汉服，金色碎片，动漫风",
-            "image": ""
-        },    
-    {
+    "acgn_diffusion": [        {
         "text":"二次元",
         "value":"High quality, masterpiece, master's work, exquisite facial features, exquisite hair, exquisite eyes, exquisite colorful hair, outstanding facial features, gem eyes, small nose, beauty, goddess, scattered snow, roads, cars, buildings, houses, pedestrians, dizziness, railings, exquisite clothing, scarves",
         "content":"高品质，杰作，大师之作，精致的五官刻画，精致的头发刻画，精致的眼睛刻画，精致的彩色头发，出色的五官，宝石眼，小巧的鼻子，美女，女神，飘散的雪花，马路，车，建筑，房子，行人， 晕，栏杆，精致的服饰，围巾",
